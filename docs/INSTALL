@@ -85,29 +85,16 @@ RUN IN BROWSER
     cd /etc/httpd/conf.d
     vi default.conf
 
-    <VirtualHost *:80>
-        DocumentRoot /var/www/html
-        ServerName localhost
+<VirtualHost *:80>
+     DocumentRoot /data/web/public/beeryde/doc_root/public
+     ServerName stage.beeryde.com
 
-        Alias /beeryde /var/www/html/beeryde/public
-
-        <Directory "/var/www/html/beeryde/public">
-
-            AllowOverride none
+    <Directory "/data/web/public/beeryde/doc_root/public">
+            AllowOverride All
             Options +FollowSymLinks
+    </Directory>
+</VirtualHost>
 
-            RewriteEngine On
-            RewriteBase /beeryde
-
-            # Redirect Trailing Slashes...
-            RewriteRule ^(.*)/$ /$1 [L,R=301]
-
-            # Handle Front Controller...
-            RewriteCond %{REQUEST_FILENAME} !-d
-            RewriteCond %{REQUEST_FILENAME} !-f
-            RewriteRule ^ index.php [L]
-        </Directory>
-    </VirtualHost>
     // After entry restart apache
     sudo systemctl restart httpd.service
 
