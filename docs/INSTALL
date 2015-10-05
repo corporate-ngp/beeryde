@@ -1,0 +1,119 @@
+COMPOSER INSTALL
+	curl -sS https://getcomposer.org/installer | php;
+	sudo mv composer.phar /usr/local/bin/composer;
+
+APPLICATION CODE
+	
+	copy source code and past in public www directory
+    cd /var/www/html;
+    cd beeryde
+
+FOLDER PERMISSIONS
+	sudo chown -R apache storage
+	sudo chown -R apache bootstrap/cache  // if require then only
+	sudo chown -R apache public/admintheme/filemanager/userfiles
+
+FOR DEVELOPER (User development branch)
+	git checkout -b development origin/development (development of release branch for staging)
+	git pull origin development
+
+TOOLKIT (SDK/FRAMEWORK) PACKAGES
+	composer install --no-dev (for development without --no-dev option)
+	composer update --no-dev (for development without --no-dev option)
+	NOTE: DEPENDENCIES get installed to vendor/ directory
+
+    //if you create any new class or route then please run bellow command
+    composer dump-autoload
+
+CREATE DATABASE
+	CREATE DATABASE beeryde DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+CONFIG
+    Create a new file in root ".env"
+    sudo vi .env
+        Add following content in the file
+            APP_ENV=local
+            APP_DEBUG=true
+            APP_KEY=fzgLkv5nQZnA4vJTyzzgsdAiP5fsK4Im
+            DB_HOST=localhost
+            DB_DATABASE=beeryde
+            DB_USERNAME=<username>
+            DB_PASSWORD=<password>
+            ADMIN_DB_HOST=localhost
+            ADMIN_DB_DATABASE=beeryde
+            ADMIN_DB_USERNAME=<username>
+            ADMIN_DB_PASSWORD=<password>
+            CACHE_DRIVER=memcached
+            SESSION_DRIVER=memcached
+            MAIL_DRIVER=mail
+            MAIL_HOST=<host>
+            MAIL_PORT=110
+            MAIL_USERNAME=<from>
+            MAIL_PASSWORD=<password>
+            MAIL_FROM=<from@server.com>
+            MAIL_NAME=<server.com>
+
+ARTISAN COMMANDS
+	Artisian Commands useful to create base database for laravel and migrate schema with seeding data
+
+	php artisan (list available command)
+	php artisan migrate
+	php artisan migrate --seed
+
+	//Following command is used to create a migration class for the tablename.
+	php artisan migrate:make create_tablename_table --create=tablename
+
+	//for clear artisan cache
+	php artisan cache:clear
+	//Vendor publish command
+	php artisan vendor:publish
+
+	(NOTE : find sql in the database/migrations folder)
+    
+    # modules based migration commands
+        php artisan module:migrate admin
+        php artisan module:seed admin        
+        php artisan module:migrate-refresh --seed admin
+        php artisan module:make-migration create_users_table admin
+
+RUN IN BROWSER
+	localhost/beeryde/public/index.php/admin
+	localhost/beeryde/public/admin
+
+
+<Virtualhost> Setup Commands
+    cd /etc/httpd/conf.d
+    vi default.conf
+
+    <VirtualHost *:80>
+        DocumentRoot /var/www/html
+        ServerName localhost
+
+        Alias /beeryde /var/www/html/beeryde/public
+
+        <Directory "/var/www/html/beeryde/public">
+
+            AllowOverride none
+            Options +FollowSymLinks
+
+            RewriteEngine On
+            RewriteBase /beeryde
+
+            # Redirect Trailing Slashes...
+            RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+            # Handle Front Controller...
+            RewriteCond %{REQUEST_FILENAME} !-d
+            RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteRule ^ index.php [L]
+        </Directory>
+    </VirtualHost>
+    // After entry restart apache
+    sudo systemctl restart httpd.service
+
+PHP INI SETTINGS
+	post_max_size = 100M
+	upload_max_filesize = 100M
+	max_file_uploads = 100
+
+Limitation: You must have memcached support enable

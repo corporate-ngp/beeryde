@@ -1,0 +1,10 @@
+/node_modules
+Homestead.yaml
+.env
+/vendor
+composer.phar
+composer.lock
+/nbproject
+.DS_Store
+Thumbs.db
+

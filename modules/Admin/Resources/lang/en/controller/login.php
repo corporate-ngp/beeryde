@@ -1,0 +1,20 @@
+<?php
+return [
+    'signin' => 'Sign In',
+    'invalidaccess' => 'Invalid Password.',
+    'maxattempt' => 'You have reached the maximum number of login attempts. Try again in a few minutes.',
+    'g-recaptcha-response-required'=>'The g-recaptcha-response field is required',
+    'username-req-field' => 'Please enter Username/Email Address.',
+    'req-fields' => 'Please enter Username/Email Address and Password.',
+    'username' => 'Username',
+    'username-email' => 'Username or Email Address',
+    'password' => 'Password',
+    'login' => 'Login',
+    'page-title' => 'Administrator Login',
+    'invalid-ipaddress' => 'You don\'t have permission to access the admin panel.',
+    'continue' => 'Continue',
+    'invalid-username' => 'Invalid Username or Email Address.',
+    'ipaddress-failattempt-mail-title' => 'Invalid Ip-Address Attempt.',
+    'ipaddress-failattempt-mail-subject' => 'User has failed Ip Attempt in login process!!',
+    'ipaddress-failattempt-mail-message' => ':username has fail login process with the Ip-address :ip_address',
+];
