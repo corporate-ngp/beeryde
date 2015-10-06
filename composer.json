@@ -13,6 +13,7 @@
         "yajra/laravel-datatables-oracle": "~5.0",
         "pqb/filemanager-laravel": "2.*",
         "greggilbert/recaptcha": "dev-master",
+        "lucadegasperi/oauth2-server-laravel": "5.0.*@dev",
         "arcanedev/log-viewer": "~3.0"
     },
     "require-dev": {
