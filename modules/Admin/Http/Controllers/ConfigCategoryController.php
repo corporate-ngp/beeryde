@@ -3,7 +3,7 @@
  * The class for managing categories specific actions.
  * 
  * 
- * @author Tushar Dahiwale <tushard@iprogrammer.com>
+ * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
  * @package Admin
  * @since 1.0
  */

@@ -3,7 +3,7 @@
  * The class for admin user authentication
  *
  *
- * @author Manish Sahu<manishs@iprogrammer.com>
+ * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
  * @package Admin
  * @since 1.0
  */
