@@ -1,0 +1,15 @@
+{
+	"name": "api-modules/api",
+	"description": "",
+	"authors": [
+		{
+			"name": "Beeryde",
+			"email": "corporate.ngp@gmail.com"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"Modules\\Api\\": ""
+		}
+	}
+}

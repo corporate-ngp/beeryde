@@ -1,5 +1,4 @@
 <?php
-
 return [
 
     /*
@@ -136,6 +135,8 @@ return [
         yajra\Datatables\DatatablesServiceProvider::class,
         Pqb\FilemanagerLaravel\FilemanagerLaravelServiceProvider::class,
         Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
+        LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider::class,
+        LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider::class,
     ],
     /*
       |--------------------------------------------------------------------------
@@ -190,5 +191,6 @@ return [
         'Datatables' => yajra\Datatables\Datatables::class,
         'FilemanagerLaravel' => Pqb\FilemanagerLaravel\Facades\FilemanagerLaravel::class,
         'Recaptcha' => Greggilbert\Recaptcha\Facades\Recaptcha::class,
+        'Authorizer' => LucaDegasperi\OAuth2Server\Facades\Authorizer::class,
     ],
 ];

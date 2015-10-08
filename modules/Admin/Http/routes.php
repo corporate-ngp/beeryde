@@ -103,3 +103,17 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         'password' => 'Auth\PasswordController',
     ]);
 });
+
+
+Route::group(['prefix' => 'site', 'namespace' => 'Modules\Admin\Http\Controllers\Site', 'before' => 'auth'], function() {
+    
+    
+    Route::get('user/data', ['as' => 'site.user.apilist', 'uses' => 'UserController@getData', 'permission' => 'index']);
+    Route::get('user/trashed', ['as' => 'site.user.trashedlisting.index', 'uses' => 'UserController@trashed', 'permission' => 'index']);
+    Route::get('user/trashed-data', ['as' => 'site.user.apitrashedlist.index', 'uses' => 'UserController@getTrashedData', 'permission' => 'index']);
+    Route::get('user/links', ['as' => 'site.user.apiuserlinks.index', 'uses' => 'UserController@getUserLinks', 'permission' => 'index']);
+    Route::post('user/group-action', ['as' => 'site.user.groupaction', 'uses' => 'UserController@groupAction', 'permission' => 'update']);
+    Route::post('user/check-avalability', ['as' => 'site.user.checkfieldavalability.update', 'uses' => 'UserController@checkAvalability', 'permission' => 'update']);
+    Route::resource('user', 'UserController');
+    
+});
