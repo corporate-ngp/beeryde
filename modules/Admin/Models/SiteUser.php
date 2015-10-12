@@ -5,16 +5,16 @@
  * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
  * @package Api 
  */
-namespace Modules\Api\Models;
+namespace Modules\Admin\Models;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Api\Models\BaseModel;
+use Modules\Admin\Models\BaseModel;
 
-class User extends BaseModel implements AuthenticatableContract, CanResetPasswordContract
+class SiteUser extends BaseModel implements AuthenticatableContract, CanResetPasswordContract
 {
 
     use Authenticatable,

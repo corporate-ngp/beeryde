@@ -1,4 +1,5 @@
 <?php
+//Admin user management basic
 Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controllers', 'before' => 'auth'], function() {
     Route::get('/', ['uses' => 'DashboardController@index', 'permission' => 'index']);
     Route::get('/dashboard', ['uses' => 'DashboardController@index', 'permission' => 'index']);
@@ -95,25 +96,16 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
     Route::post('filemanager/connectors', ['as' => 'admin.filemanager', 'uses' => 'FilemanagerLaravelController@postConnectors']);
     Route::resource('medias', 'MediasController');
 
-
+//site management
+    Route::get('site-user/data', ['as' => 'admin.site-user.apilist', 'uses' => 'SiteUserController@getData']);
+    Route::get('site-user/trashed', ['as' => 'admin.site-user.trashedlisting.index', 'uses' => 'SiteUserController@trashed']);
+    Route::get('site-user/trashed-data', ['as' => 'admin.site-user.apitrashedlist.index', 'uses' => 'SiteUserController@getTrashedData']);
+    Route::post('site-user/group-action', ['as' => 'admin.site-user.groupaction', 'uses' => 'SiteUserController@groupAction']);
+    Route::resource('site-user', 'SiteUserController');
 
     ################ PLEASE WRITE YOUR ROUTES ABOVE THIS CODE ##################################
     Route::controllers([
         'auth' => 'Auth\AuthController',
         'password' => 'Auth\PasswordController',
     ]);
-});
-
-
-Route::group(['prefix' => 'site', 'namespace' => 'Modules\Admin\Http\Controllers\Site', 'before' => 'auth'], function() {
-    
-    
-    Route::get('user/data', ['as' => 'site.user.apilist', 'uses' => 'UserController@getData', 'permission' => 'index']);
-    Route::get('user/trashed', ['as' => 'site.user.trashedlisting.index', 'uses' => 'UserController@trashed', 'permission' => 'index']);
-    Route::get('user/trashed-data', ['as' => 'site.user.apitrashedlist.index', 'uses' => 'UserController@getTrashedData', 'permission' => 'index']);
-    Route::get('user/links', ['as' => 'site.user.apiuserlinks.index', 'uses' => 'UserController@getUserLinks', 'permission' => 'index']);
-    Route::post('user/group-action', ['as' => 'site.user.groupaction', 'uses' => 'UserController@groupAction', 'permission' => 'update']);
-    Route::post('user/check-avalability', ['as' => 'site.user.checkfieldavalability.update', 'uses' => 'UserController@checkAvalability', 'permission' => 'update']);
-    Route::resource('user', 'UserController');
-    
 });

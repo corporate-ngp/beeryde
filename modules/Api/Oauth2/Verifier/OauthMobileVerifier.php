@@ -13,18 +13,15 @@ namespace Modules\Api\Oauth2\Verifier;
 use Auth;
 use DB;
 use \Modules\Api\Repositories\UserRepository as UserRepo;
-use \Modules\Api\Repositories\TempUserOtpRepository as TempUserOtpRepo;
 use Log;
 use Exception;
 
 class OauthMobileVerifier {
 
     private $userRepo;
-    private $tempUserOtpRepo;
 
-    public function __construct(UserRepo $userRepo, TempUserOtpRepo $tempUserOtpRepo) {
+    public function __construct(UserRepo $userRepo) {
         $this->userRepo = $userRepo;
-        $this->tempUserOtpRepo = $tempUserOtpRepo;
     }
 
     /**
@@ -58,7 +55,7 @@ class OauthMobileVerifier {
     public function login($countryCode, $phone, $otp, $user) {
         try {
             $response = false;
-            $isVerified = $this->tempUserOtpRepo->validateOtp($countryCode, $phone, $otp);
+            $isVerified = '';
             if ($isVerified) {
                 $this->userRepo->updateLogin(array('is_login' => 1), $user);
                 Log::info('User logged in successfully', ['id' => $user->user_id]);
@@ -83,7 +80,7 @@ class OauthMobileVerifier {
     public function register($countryCode, $phone, $otp, $firstName, $lastName) {
         try {
             $response = false;
-            $isVerified = $this->tempUserOtpRepo->validateOtp($countryCode, $phone, $otp);
+            $isVerified = '';
             if ($isVerified) {
                 $data = [];
                 $data['country_code'] = $countryCode;

@@ -14,6 +14,7 @@ Route::model('ipaddress', 'Modules\Admin\Models\IpAddress');
 Route::model('countries', 'Modules\Admin\Models\Country');
 Route::model('states', 'Modules\Admin\Models\State');
 Route::model('cities', 'Modules\Admin\Models\City');
+Route::model('site_user', 'Modules\Admin\Models\SiteUser');
 
 Route::bind('usertype_links', function($type) {
     $userTypeRepository = new Modules\Admin\Repositories\UserTypeRepository(new Modules\Admin\Models\UserType);

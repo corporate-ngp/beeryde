@@ -4,7 +4,7 @@
  * This class is to create user related functionalities
  *
  *
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
+ * @author Aditi Thombre <aditit@iprogrammer.com>
  * @package Api
  */
 

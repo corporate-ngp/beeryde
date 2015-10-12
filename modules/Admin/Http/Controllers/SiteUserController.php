@@ -7,24 +7,18 @@
  * @package Admin
  * @since 1.0
  */
-
-namespace Modules\Admin\Http\Controllers\Site;
+namespace Modules\Admin\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Modules\Admin\Repositories\UserRepository;
-use Modules\Admin\Http\Requests\UserCreateRequest;
-use Modules\Admin\Http\Requests\UserUpdateRequest;
-use Modules\Admin\Models\User;
-use Modules\Admin\Repositories\UserTypeRepository;
+use Modules\Admin\Repositories\SiteUserRepository;
+use Modules\Admin\Http\Requests\SiteUserCreateRequest;
+use Modules\Admin\Http\Requests\SiteUserUpdateRequest;
+use Modules\Admin\Models\SiteUser;
 use Datatables;
 use Modules\Admin\Services\Helper\ImageHelper;
 use Illuminate\Support\Str;
-use Modules\Admin\Repositories\LinksRepository;
-use Modules\Admin\Repositories\LinkCategoryRepository;
-use Form;
-use Auth;
 
-class UserController extends Controller
+class SiteUserController extends Controller
 {
 
     /**
@@ -33,27 +27,6 @@ class UserController extends Controller
      * @var Modules\Admin\Repositories\UserRepository
      */
     protected $repository;
-
-    /**
-     * The UserTypeRepository instance.
-     *
-     * @var Modules\Admin\Repositories\UserTypeRepository
-     */
-    protected $userTypeRepository;
-
-    /**
-     * The LinksRepository instance.
-     *
-     * @var Modules\Admin\Repositories\LinksRepository
-     */
-    protected $linksRepository;
-
-    /**
-     * The LinkCategoryRepository instance.
-     *
-     * @var Modules\Admin\Repositories\LinkCategoryRepository
-     */
-    protected $linkCategoryRepository;
 
     /**
      * Create a new UserController instance.
@@ -65,14 +38,11 @@ class UserController extends Controller
      * @return void
      */
     public function __construct(
-    UserRepository $repository, UserTypeRepository $userTypeRepository, LinksRepository $linksRepository, LinkCategoryRepository $linkCategoryRepository)
+    SiteUserRepository $repository)
     {
         parent::__construct();
         $this->middleware('acl');
         $this->repository = $repository;
-        $this->userTypeRepository = $userTypeRepository;
-        $this->linksRepository = $linksRepository;
-        $this->linkCategoryRepository = $linkCategoryRepository;
     }
 
     /**
@@ -92,47 +62,33 @@ class UserController extends Controller
                 ->addColumn('avatar', function ($user) {
                     return '<div class="user-listing-img">' . ImageHelper::getUserAvatar($user->id, $user->avatar) . '</div>';
                 })
-                ->addColumn('username', function ($user) {
-                    $userType = (!empty($user->UserType->name)) ? $user->UserType->name : '';
-                    return $user->username . ' (<strong>' . $userType . '</strong>) <br/> Id (' . $user->id . ')';
-                })
                 ->addColumn('email', function ($user) {
                     $gender = ($user->gender == 1) ? 'Male' : 'Female';
-                    return $user->first_name . ' ' . $user->last_name . ' (' . $gender . ') <br/>' . $user->email . ' </br>' . $user->contact;
-                })
-                ->addColumn('links', function ($user) {
-                    return Form::select('user_links', $this->repository->getUserSelectLinks($user->id), ['class' => 'select2me form-control']);
+                    return $user->name . ' (' . $gender . ') <br/>' . $user->email . ' </br>' . $user->contact;
                 })
                 ->addColumn('status', function ($user) {
                     return ($user->status == 1) ? '<span class="label label-sm label-success">' . trans('admin::messages.active') . '</span>' : '<span class="label label-sm label-danger">' . trans('admin::messages.inactive') . '</span>';
                 })
                 ->addColumn('action', function ($user) {
                     $actionList = '';
-                    if (!empty(Auth::user()->hasEdit) || (!empty(Auth::user()->hasOwnEdit) && ($user->created_by == Auth::user()->id))) {
 
                         $actionList .= '<a href="javascript:;" data-action="edit" data-id="' . $user->id . '" class="btn btn-xs default yellow-gold margin-bottom-5 edit-form-link edit" title="' . trans('admin::messages.edit') . '"><i class="fa fa-pencil"></i></a>';
-                    }
-                    if (!empty(Auth::user()->hasDelete) || (!empty(Auth::user()->hasOwnDelete) && ($user->created_by == Auth::user()->id))) {
+
                         $actionList .= '<a href="javascript:;" data-message="' . trans('admin::messages.delete-confirm') . '" data-action="delete" data-id="' . $user->id . '" class="btn btn-xs default red-thunderbird margin-bottom-5 delete" title="' . trans('admin::messages.delete') . '"><i class="fa fa-trash-o"></i></a>';
-                    }
+                        $actionList .= '<a href="'.\URL::to("/admin/site-user/".$user->id).'" data-message="Show" data-action="show" data-id="' . $user->id . '" class="btn btn-xs default blue-thunderbird margin-bottom-5 show" title="Show"><i class="fa fa-search"></i></a>';
+
                     return $actionList;
                 })
                 ->filter(function ($instance) use ($request) {
 
-                    //to display own records
-                    if (Auth::user()->hasOwnView) {
-                        $instance->collection = $instance->collection->filter(function ($row) {
-                            return (Str::equals($row['created_by'], Auth::user()->id)) ? true : false;
-                        });
-                    }
-                    if ($request->has('username')) {
+                    if ($request->has('name')) {
                         $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                            return (Str::contains($row['username'], $request->get('username')) || Str::equals($row['id'], $request->get('username'))) ? true : false;
+                            return (Str::contains($row['name'], $request->get('name')) || Str::equals($row['id'], $request->get('name'))) ? true : false;
                         });
                     }
                     if ($request->has('email')) {
                         $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                            return (Str::contains($row['email'], $request->get('email')) || Str::contains($row['first_name'], $request->get('email')) || Str::contains($row['last_name'], $request->get('email')) || Str::contains($row['contact'], $request->get('email'))) ? true : false;
+                            return (Str::contains($row['email'], $request->get('email')) || Str::contains($row['name'], $request->get('email')) || Str::contains($row['contact'], $request->get('email'))) ? true : false;
                         });
                     }
                     if ($request->has('status')) {
@@ -152,7 +108,7 @@ class UserController extends Controller
     public function index()
     {
         $bulkAction = $this->repository->getAdminBulkActionSelect();
-        return view('admin::users.index', compact('bulkAction'));
+        return view('admin::site.users.index', compact('bulkAction'));
     }
 
     /**
@@ -174,8 +130,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $userType = $this->userTypeRepository->listUserTypeData()->toArray();
-        return view('admin::users.create', compact('userType'));
+        return view('admin::site.users.create');
     }
 
     /**
@@ -184,7 +139,7 @@ class UserController extends Controller
      * @param  UserCreateRequest $request
      * @return Response
      */
-    public function store(UserCreateRequest $request)
+    public function store(SiteUserCreateRequest $request)
     {
         $response = $this->repository->create($request->all());
         return response()->json($response);
@@ -196,30 +151,17 @@ class UserController extends Controller
      * @param  Modules\Admin\Models\User
      * @return Response
      */
-    public function edit(User $user)
+    public function edit(SiteUser $user)
     {
-        $links = $this->linkCategoryRepository->getLinks($user->user_type_id);
-        $userLinks = $this->repository->listUserLinksWithColumns($user->id);
-        $userType = $this->userTypeRepository->listUserTypeData()->toArray();
-        return view('admin::users.edit', compact('user', 'userType', 'links', 'userLinks'));
+        return view('admin::site.users.edit', compact('user'));
     }
-
-    /**
-     * Show the form for user links based on user type selection
-     *
-     * @param  Request $request
-     * @return Response
-     */
-    public function getUserLinks(Request $request)
+    
+     public function show(SiteUser $user)
     {
-        $userTypeId = (!empty($request['user_type'])) ? $request['user_type'] : '';
-        $userId = (!empty($request['user_id'])) ? $request['user_id'] : '';
-        $links = $this->linkCategoryRepository->getLinks($userTypeId);
-        $userLinks = $this->repository->listUserLinksWithColumns($userId);
-        $response['success'] = true;
-        $response['form'] = view('admin::users.user-links', compact('links', 'userLinks'))->render();
-
-        return response()->json($response);
+        foreach(collect($user) as $key => $value){
+             
+            echo "<br/> ".$key.' = '.$value ;
+        }
     }
 
     /**
@@ -229,7 +171,7 @@ class UserController extends Controller
      * @param  Modules\Admin\Models\User
      * @return Response
      */
-    public function update(UserUpdateRequest $request, User $user)
+    public function update(SiteUserUpdateRequest $request, SiteUser $user)
     {
         $response = $this->repository->update($request->all(), $user);
         return response()->json($response);
@@ -243,7 +185,7 @@ class UserController extends Controller
     public function trashed()
     {
         $bulkAction = $this->repository->getTrashBulkActionSelect();
-        return view('admin::users.trashed', compact('bulkAction'));
+        return view('admin::site.users.trashed', compact('bulkAction'));
     }
 
     /**
@@ -263,41 +205,30 @@ class UserController extends Controller
                 ->addColumn('avatar', function ($user) {
                     return '<div class="user-listing-img">' . ImageHelper::getUserAvatar($user->id, $user->avatar) . '</div>';
                 })
-                ->addColumn('username', function ($user) {
-                    $userType = (!empty($user->UserType->name)) ? $user->UserType->name : '';
-                    return $user->username . ' (<strong>' . $userType . '</strong>) <br/> Id (' . $user->id . ')';
-                })
                 ->addColumn('email', function ($user) {
                     $gender = ($user->gender == 1) ? 'Male' : 'Female';
-                    return $user->first_name . ' ' . $user->last_name . ' (' . $gender . ') <br/>' . $user->email . ' </br>' . $user->contact;
-                })
-                ->addColumn('links', function ($user) {
-                    return Form::select('user_links', $this->repository->getUserSelectLinks($user->id), ['class' => 'select2me form-control']);
+                    return $user->name .' (' . $gender . ') <br/>' . $user->email . ' </br>' . $user->contact;
                 })
                 ->addColumn('status', function ($user) {
                     return ($user->status == 1) ? '<span class="label label-sm label-success">' . trans('admin::messages.active') . '</span>' : '<span class="label label-sm label-danger">' . trans('admin::messages.inactive') . '</span>';
                 })
                 ->addColumn('action', function ($user) {
 
-                    if (!empty(Auth::user()->hasDelete) || (!empty(Auth::user()->hasOwnDelete) && ($user->created_by == Auth::user()->id))) {
                         $actionList = '<a href="javascript:;" data-message="' . trans('admin::messages.delete-confirm') . '" data-action="delete-hard" data-id="' . $user->id . '" class="btn btn-xs default red-thunderbird margin-bottom-5 delete" title="' . trans('admin::messages.delete-hard') . '"><i class="fa fa-trash-o"></i></a>';
-                    }
-                    if (!empty(Auth::user()->hasEdit) || (!empty(Auth::user()->hasOwnEdit) && ($user->created_by == Auth::user()->id))) {
-                        $actionList .= '<a href="javascript:;" data-message="' . trans('admin::messages.restore-confirm') . '" data-action="restore" data-id="' . $user->id . '" class="btn btn-xs default red-thunderbird margin-bottom-5 delete" title="' . trans('admin::messages.restore') . '"><i class="fa fa-undo"></i></a>';
-                    }
 
+                        $actionList .= '<a href="javascript:;" data-message="' . trans('admin::messages.restore-confirm') . '" data-action="restore" data-id="' . $user->id . '" class="btn btn-xs default red-thunderbird margin-bottom-5 delete" title="' . trans('admin::messages.restore') . '"><i class="fa fa-undo"></i></a>';
                     return $actionList;
                 })
                 ->filter(function ($instance) use ($request) {
 
-                    if ($request->has('username')) {
+                    if ($request->has('name')) {
                         $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                            return (Str::contains($row['username'], $request->get('username')) || Str::equals($row['id'], $request->get('username'))) ? true : false;
+                            return (Str::contains($row['name'], $request->get('name')) || Str::equals($row['id'], $request->get('name'))) ? true : false;
                         });
                     }
                     if ($request->has('email')) {
                         $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                            return (Str::contains($row['email'], $request->get('email')) || Str::contains($row['first_name'], $request->get('email')) || Str::contains($row['last_name'], $request->get('email')) || Str::contains($row['contact'], $request->get('email'))) ? true : false;
+                            return (Str::contains($row['email'], $request->get('email')) || Str::contains($row['name'], $request->get('email')) || Str::contains($row['contact'], $request->get('email'))) ? true : false;
                         });
                     }
                     if ($request->has('status')) {
@@ -309,22 +240,4 @@ class UserController extends Controller
                 ->make(true);
     }
 
-    /**
-     * check field Avalability
-     *
-     * @param  Request $request
-     * @return Response
-     */
-    public function checkAvalability(Request $request)
-    {
-        $response = [];
-        $result = $this->repository->checkField($request->all());
-        if ($result) {
-            $response = ['status' => 'fail', 'message' => trans('admin::controller/user.username-check-error', ['name' => $request['value']])];
-        } else {
-            $response = ['status' => 'success', 'message' => trans('admin::controller/user.username-check-success', ['name' => $request['value']])];
-        }
-
-        return response()->json($response);
-    }
 }
