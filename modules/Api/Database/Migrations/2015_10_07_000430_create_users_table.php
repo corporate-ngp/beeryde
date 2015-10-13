@@ -29,7 +29,8 @@ class CreateUsersTable extends Migration
             $table->string('profession_details', 100)->nullable();
             $table->string('emergency_contact_1', 20)->nullable()->comment = "Contact number either phone or mobile";
             $table->string('emergency_contact_2', 20)->nullable()->comment = "Contact number either phone or mobile";
-            $table->string('id_proof', 255)->nullable()->comment = "User identity proof";
+            $table->string('id_proof_type', 100)->nullable()->comment = "Type of identity proof";
+            $table->string('id_proof', 255)->nullable()->comment = "User identity proof attachment";
             $table->boolean('music')->nullable()->unsigned()->comment = "1 : Active, 0 : Inactive";
             $table->boolean('smoking')->nullable()->unsigned()->comment = "1 : Active, 0 : Inactive";
             $table->string('corporate_email', 100)->nullable();

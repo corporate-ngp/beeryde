@@ -51,7 +51,7 @@ class UserRepository extends BaseRepository
                 $userIds = explode(',', $inputs['ids']);
                 foreach ($userIds as $key => $userId) {
                     $id = (int) $userId;
-                    $user = $this->getById($id);
+                    $user = $this->getByIdWithTrashed($id);
                     if (!empty($user)) {
                         switch ($inputs['value']) {
                             case 'status-0': $user->status = 0;
@@ -73,7 +73,7 @@ class UserRepository extends BaseRepository
                 $userIds = explode(',', $inputs['ids']);
                 foreach ($userIds as $key => $userId) {
                     $id = (int) $userId;
-                    $user = $this->getById($id);
+                    $user = $this->getByIdWithTrashed($id);
                     if (!empty($user)) {
                         $user->delete();
                         $resultStatus = true;
@@ -84,7 +84,7 @@ class UserRepository extends BaseRepository
                 $userIds = explode(',', $inputs['ids']);
                 foreach ($userIds as $key => $userId) {
                     $id = (int) $userId;
-                    $user = $this->getById($id);
+                    $user = $this->getByIdWithTrashed($id);
                     if (!empty($user)) {
                         $user->forceDelete();
                         $resultStatus = true;
@@ -95,7 +95,7 @@ class UserRepository extends BaseRepository
                 $userIds = explode(',', $inputs['ids']);
                 foreach ($userIds as $key => $userId) {
                     $id = (int) $userId;
-                    $user = $this->getById($id);
+                    $user = $this->getByIdWithTrashed($id);
                     if (!empty($user)) {
                         $user->restore();
                         $resultStatus = true;

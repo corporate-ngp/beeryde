@@ -3,4 +3,6 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'Modules\Api\Http\Controllers
     // $user_id = \Authorizer::getResourceOwnerId();
 
     Route::resource('users', 'UserController');
+    
+    Route::resource('pages', 'PagesController');
 });

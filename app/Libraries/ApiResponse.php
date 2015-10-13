@@ -16,7 +16,7 @@ class ApiResponse extends Response {
 
     private static $response = [
         'success' => true,
-        'payload' => [],
+        'data' => [],
         'error' => [
             'code' => 0,
             'message' => ''
@@ -66,7 +66,7 @@ class ApiResponse extends Response {
     public static function json($data = [], $status = 200, array $headers = [], $options = 0) {
         $return = self::$response;
 
-        $return['payload'] = $data;
+        $return['data'] = $data;
 
         return parent::json($return, $status, $headers);
     }
