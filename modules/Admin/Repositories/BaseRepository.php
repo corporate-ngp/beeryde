@@ -45,6 +45,17 @@ abstract class BaseRepository
      */
     public function getById($id)
     {
+        return $this->model->find($id);
+    }
+
+    /**
+     * Get Model by id.
+     *
+     * @param  int  $id
+     * @return App\Models\Model
+     */
+    public function getByIdWithTrashed($id)
+    {
         return $this->model->withTrashed()->find($id);
     }
 }
