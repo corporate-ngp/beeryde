@@ -31,6 +31,8 @@ class AdminDatabaseSeeder extends Seeder
         $this->call('Modules\Admin\Database\Seeders\ConfigCategoryTableSeeder');
         $this->call('Modules\Admin\Database\Seeders\ConfigSettingsTableSeeder');
         $this->call('Modules\Admin\Database\Seeders\SystemEmailsTableSeeder');
+        $this->call('Modules\Admin\Database\Seeders\SitePagesTableSeeder');
+        $this->call('Modules\Admin\Database\Seeders\UsersTableSeeder');
 
         //enable foreign key check for this connection after running seeders
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
