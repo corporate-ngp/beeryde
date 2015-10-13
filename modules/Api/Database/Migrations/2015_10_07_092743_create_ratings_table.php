@@ -18,8 +18,8 @@ class CreateRatingsTable extends Migration
             $table->integer('ratings_by')->unsigned();
             $table->integer('ratings_to')->unsigned();
             $table->tinyInteger('ratings', false, true)->default(0);
-            $table->foreign('ratings_by')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('ratings_to')->references('id')->on('users')->onDelete('cascade');
+            //$table->foreign('ratings_by')->references('id')->on('users')->onDelete('cascade');
+            //$table->foreign('ratings_to')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
