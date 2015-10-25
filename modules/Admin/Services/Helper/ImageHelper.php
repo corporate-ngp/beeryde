@@ -79,7 +79,7 @@ class ImageHelper
         $default = self::getDefaultImageLink();
         if (!empty($userId) && empty($avatar)) {
             $user = DB::table('admins')->select('avatar')->where('id', $userId)->first();
-            $avatar = $user->avatar;
+            $avatar = (!empty($user->avatar)) ? $user->avatar : '';
         }
         if (!empty($avatar)) {
 
