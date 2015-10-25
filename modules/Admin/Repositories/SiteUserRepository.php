@@ -3,7 +3,7 @@
  * This class is to create user related functionalities
  *
  *
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
+ * @author NGP <corporate.ngp@gmail.com>
  * @package Api
  */
 namespace Modules\Admin\Repositories;

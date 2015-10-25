@@ -3,9 +3,9 @@
  * To handle Cache clear based on Memcache driver
  * on Model manipulation actions.
  *
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
- * @package Admin
- * @since 1.0
+ * @author NGP <corporate.ngp@gmail.com>
+
+ 
  */
 namespace Modules\Admin\Listeners;
 

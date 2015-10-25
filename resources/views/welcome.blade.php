@@ -48,8 +48,7 @@
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">Admin Panel</div>
-                <div class="title-small ">Laravel 5.1</div>
+                <div class="title"><img src="{!! URL::asset('images/default-logo.png')!!}" alt="welcome" /></div>
                 <div class="quote">Copyright © {!! date('Y') !!} BeeRyde | All Rights Reserved</div>
             </div>
         </div>

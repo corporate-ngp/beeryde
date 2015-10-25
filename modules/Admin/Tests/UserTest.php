@@ -3,9 +3,9 @@
  * Test Case For User Controller
  *
  *
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
- * @package Admin
- * @since 1.0
+ * @author NGP <corporate.ngp@gmail.com>
+
+ 
  */
 namespace Modules\Admin\Tests;
 
@@ -62,7 +62,7 @@ class UserTest extends TestCase
     public function testStore()
     {
         Auth::loginUsingId(1);
-        $response = $this->action('POST', '\Modules\Admin\Http\Controllers\UserController@store',['username'=>'nileshpa','email'=>'nileshgpangul1@gmail.com','first_name'=>'Test','last_name'=>'User','password'=>'7u8i9o0p','password_confirmation'=>'7u8i9o0p','gender'=>0,'contact'=>'9561318944','avatar'=>'','status'=>1,'skip_ip_check'=>'1','user_type_id'=>1,'remember_token'=>'NULL','deleted_at'=>'NULL','created_by'=>1,'created_at'=>date('Y-m-d h:i:s'),'updated_by'=>0,'updated_at'=>'']);
+        $response = $this->action('POST', '\Modules\Admin\Http\Controllers\UserController@store',['username'=>'ngp123456','email'=>'corporate.ngp+beeryde_1@gmail.com','first_name'=>'Test','last_name'=>'User','password'=>'7u8i9o0p','password_confirmation'=>'7u8i9o0p','gender'=>0,'contact'=>'9087654321','avatar'=>'','status'=>1,'skip_ip_check'=>'1','user_type_id'=>1,'remember_token'=>'NULL','deleted_at'=>'NULL','created_by'=>1,'created_at'=>date('Y-m-d h:i:s'),'updated_by'=>0,'updated_at'=>'']);
         $this->assertResponseStatus($response->status());
         $this->assertResponseOk();
     }
@@ -88,7 +88,7 @@ class UserTest extends TestCase
     public function testUpdate()
     {
         Auth::loginUsingId(1);
-        $response = $this->action('PUT', '\Modules\Admin\Http\Controllers\UserController@update', ['id'=>5,'username'=>'nileshpa','email'=>'nilkeshgpangul1@gmail.com','first_name'=>'Test','last_name'=>'User','password'=>'7u8i9o0p','password_confirmation'=>'7u8i9o0p','gender'=>0,'contact'=>'9561318944','avatar'=>'','status'=>1,'skip_ip_check'=>'1','user_type_id'=>1,'remember_token'=>'NULL','deleted_at'=>'NULL','created_by'=>0,'created_at'=>'','updated_by'=>1,'updated_at'=>date('Y-m-d h:i:s')]);
+        $response = $this->action('PUT', '\Modules\Admin\Http\Controllers\UserController@update', ['id'=>5,'username'=>'ndp123455','email'=>'corporate.ngp+beeryde_1@gmail.com','first_name'=>'Test','last_name'=>'User','password'=>'7u8i9o0p','password_confirmation'=>'7u8i9o0p','gender'=>0,'contact'=>'9087654321','avatar'=>'','status'=>1,'skip_ip_check'=>'1','user_type_id'=>1,'remember_token'=>'NULL','deleted_at'=>'NULL','created_by'=>0,'created_at'=>'','updated_by'=>1,'updated_at'=>date('Y-m-d h:i:s')]);
         $this->assertResponseStatus($response->status());
     }
     

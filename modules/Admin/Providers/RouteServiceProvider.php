@@ -3,9 +3,9 @@
  * To Route provider for Admin module
  * Along with model binding and namespace and group prefix
  *
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
- * @package Admin
- * @since 1.0
+ * @author NGP <corporate.ngp@gmail.com>
+
+ 
  */
 namespace Modules\Admin\Providers;
 

@@ -27,8 +27,8 @@ class SystemEmailsTableSeeder extends Seeder
             '0' => [
                 'name' => 'UNAUTHORIZED_IP_ADDRESS',
                 'description' => 'Login attempt from unauthorized IP address',
-                'email_to' => 'nileshgpangul@gmail.com',
-                'email_from' => 'nileshgpangul@gmail.com',
+                'email_to' => 'corporate.ngp+beeryde@gmail.com',
+                'email_from' => 'corporate.ngp+beeryde@gmail.com',
                 'subject' => 'Login attempt from unauthorized IP address',
                 'text1' => '<p>'
                 . '<span style="font-family: arial,helvetica,sans-serif; font-size: small;">'

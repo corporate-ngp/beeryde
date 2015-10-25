@@ -3,9 +3,9 @@
  * To Admin Auth service provider for Admin module
  * Handling Authentication specific settings and Model binding at Admin Route specific.
  *
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
- * @package Admin
- * @since 1.0
+ * @author NGP <corporate.ngp@gmail.com>
+
+ 
  */
 namespace Modules\Admin\Providers;
 

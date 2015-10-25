@@ -4,7 +4,7 @@
  * @abstract class for creating base for all repositories 
  * 
  * 
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
+ * @author NGP <corporate.ngp@gmail.com>
  * @package Api
  */
 

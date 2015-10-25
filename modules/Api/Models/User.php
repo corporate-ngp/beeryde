@@ -2,7 +2,7 @@
 /**
  * To present User Model with associated authentication
  * 
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
+ * @author NGP <corporate.ngp@gmail.com>
  * @package Api 
  */
 namespace Modules\Api\Models;

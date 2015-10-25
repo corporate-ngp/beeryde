@@ -2,9 +2,9 @@
 /**
  * trait UserHasLink
  * 
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
+ * @author NGP <corporate.ngp@gmail.com>
  * @package Modules\Admin\Services\Access\Traits
- * @since 1.0
+ 
  */
 
 namespace Modules\Admin\Services\Access\Traits;

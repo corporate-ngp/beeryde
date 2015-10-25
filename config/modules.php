@@ -139,8 +139,8 @@ return [
     'composer' => [
         'vendor' => 'admin-modules',
         'author' => [
-            'name' => 'Nilesh',
-            'email' => 'nileshgpangul@gmail.com',
+            'name' => 'CorporateNGP',
+            'email' => 'corporate.ngp+beeryde@gmail.com',
         ],
     ],
     /*

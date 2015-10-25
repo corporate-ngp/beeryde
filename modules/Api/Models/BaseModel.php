@@ -2,7 +2,7 @@
 /**
  * To provide base model specific general feature along with the class
  *
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
+ * @author NGP <corporate.ngp@gmail.com>
  * @package Api 
  */
 

@@ -3,7 +3,7 @@
 /**
  * To present Token Model with associated authentication
  * 
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
+ * @author NGP <corporate.ngp@gmail.com>
  * @package Api 
  */
 
