@@ -3,7 +3,7 @@
  * Test Case For User Controller
  *
  *
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
+ * @author NGP <corporate.ngp@gmail.com>
  * @package Admin
  * @since 1.0
  */

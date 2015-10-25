@@ -4,7 +4,7 @@
  * This class is for managing ratings given to user
  * 
  * 
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
+ * @author NGP <corporate.ngp@gmail.com>
  * @package Api
  */
 

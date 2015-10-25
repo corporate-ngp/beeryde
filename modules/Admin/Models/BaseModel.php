@@ -2,9 +2,9 @@
 /**
  * To provide base model specific general feature along with the class
  *
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
- * @package Admin
- * @since 1.0
+ * @author NGP <corporate.ngp@gmail.com>
+
+ 
  */
 
 namespace Modules\Admin\Models;

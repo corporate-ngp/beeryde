@@ -3,7 +3,7 @@
 /**
  * To present OauthClient Model 
  *
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
+ * @author NGP <corporate.ngp@gmail.com>
  * @package Api
  */
 

@@ -4,7 +4,7 @@
  * The class for verifying oauth on the basis of OTP request validation
  * 
  * 
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
+ * @author NGP <corporate.ngp@gmail.com>
  * @package Api
  */
 

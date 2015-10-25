@@ -4,7 +4,7 @@
  * This class is for managing basic api related functionalities
  * It will be used as base class for consuming third party api
  *
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
+ * @author NGP <corporate.ngp@gmail.com>
  * @package Api
  */
 

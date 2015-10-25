@@ -4,7 +4,7 @@
  * @version
  *
  * @package Javascript
- * @author Nilesh G. Pangul
+ * @author CorporateNGP
  * @copyright (c) 2015-2016 
  * @license 
  */

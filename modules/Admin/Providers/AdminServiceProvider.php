@@ -3,9 +3,9 @@
  * To Admin service provider for Admin module
  * Handling mapping and register of Config/Views/Transaltion/Midlleware
  *
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
- * @package Admin
- * @since 1.0
+ * @author NGP <corporate.ngp@gmail.com>
+
+ 
  */
 namespace Modules\Admin\Providers;
 

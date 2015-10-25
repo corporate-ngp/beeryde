@@ -4,7 +4,7 @@
  * This class is to create device tokens related functionalities
  * 
  * 
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
+ * @author NGP <corporate.ngp@gmail.com>
  * @package Api
  */
 

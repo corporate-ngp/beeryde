@@ -4,7 +4,7 @@
  * An interface to declare repository related basic functions
  * 
  * 
- * @author Nilesh G. Pangul <nileshgpangul@gmail.com>
+ * @author NGP <corporate.ngp@gmail.com>
  * @package Api
  */
 
