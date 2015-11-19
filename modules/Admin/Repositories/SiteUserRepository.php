@@ -8,8 +8,9 @@
  */
 namespace Modules\Admin\Repositories;
 
-use Modules\Api\Models\User;
+use Modules\Admin\Models\SiteUser;
 use Modules\Admin\Services\Helper\ImageHelper;
+use App\Libraries\ApiResponse;
 use Exception;
 use Route;
 use Log;
@@ -29,9 +30,27 @@ class SiteUserRepository extends BaseRepository
      * @return void
      */
 
-    public function __construct(User $user)
+    public function __construct(SiteUser $user)
     {
         $this->model = $user;
+    }
+
+    /**
+     * rules to be applied for update user params
+     * @return array
+     */
+    public static function getUpdateRules()
+    {
+        return SiteUser::getUpdateRules();
+    }
+
+    /**
+     * rules to be applied for crewate user
+     * @return array
+     */
+    public static function getCreateRules()
+    {
+        return SiteUser::getCreateRules();
     }
 
     /**
@@ -136,10 +155,10 @@ class SiteUserRepository extends BaseRepository
      */
     public function data($params = [])
     {
-        Cache::tags(User::table())->flush();
+        //Cache::tags($this->model->table())->flush();
         $cacheKey = str_replace(['\\'], [''], __METHOD__) . ':' . md5(json_encode($params));
-        $response = Cache::tags(User::table())->remember($cacheKey, $this->ttlCache, function() {
-            return User::select('*')->get();
+        $response = Cache::tags($this->model->table())->remember($cacheKey, $this->ttlCache, function() {
+            return $this->model->select('*')->get();
         });
 
         return $response;
@@ -154,8 +173,8 @@ class SiteUserRepository extends BaseRepository
     public function trashedData($params = [])
     {
         $cacheKey = str_replace(['\\'], [''], __METHOD__) . ':' . md5(json_encode($params));
-        $response = Cache::tags(User::table())->remember($cacheKey, $this->ttlCache, function() {
-            return User::select('*')->onlyTrashed()->get();
+        $response = Cache::tags($this->model->table())->remember($cacheKey, $this->ttlCache, function() {
+            return $this->model->select('*')->onlyTrashed()->get();
         });
 
         return $response;
@@ -168,13 +187,21 @@ class SiteUserRepository extends BaseRepository
      * @param  Array  $inputs
      * @return void
      */
-    private function save($user, $inputs)
+    private function save($inputs, $user = '')
     {
-        $user = new $this->model;
-        $allColumns = $user->getTableColumns($user->getTable());
-        foreach ($inputs as $key => $value) {
-            if (in_array($key, $allColumns)) {
-                $user->$key = $value;
+        if (empty($user)) {
+            $user = new $this->model;
+            $allColumns = $user->getTableColumns($user->getTable());
+            foreach ($inputs as $key => $value) {
+                if (in_array($key, $allColumns)) {
+                    $user->$key = $value;
+                }
+            }
+        } else {
+            foreach ($inputs as $key => $value) {
+                if (isset($user->$key) && $value != "") {
+                    $user->$key = $value;
+                }
             }
         }
 
@@ -182,9 +209,10 @@ class SiteUserRepository extends BaseRepository
             $user->password = bcrypt($inputs['password']);
         }
 
+        $user->save();
         $this->updateAvatar($inputs, $user);
 
-        return $user->save();
+        return $user;
     }
 
     /**
@@ -198,11 +226,8 @@ class SiteUserRepository extends BaseRepository
 
         try {
             //create user
-            $inputs['password'] = bcrypt($inputs['password']);
-            $user = User::create($inputs);
-            $user->password = $inputs['password'];
-            $user->save();
-            $this->updateAvatar($inputs, $user);
+            $inputs['password'] = (!empty($inputs['password'])) ? bcrypt($inputs['password']) : bcrypt(time());
+            $user = $this->save($inputs);
             if ($user) {
                 if (isset($inputs['submit_save'])) {
                     $userLabel = trans('admin::messages.user');
@@ -232,6 +257,27 @@ class SiteUserRepository extends BaseRepository
     }
 
     /**
+     * Store a 
+     * 
+     * @param  array $inputs
+     * @return void
+     */
+    public function createUser($inputs)
+    {
+        try {
+            $inputs['password'] = (!empty($inputs['password'])) ? bcrypt($inputs['password']) : bcrypt(time());
+            $user = $this->save($inputs);
+            $response = ApiResponse::json($user);
+        } catch (Exception $e) {
+            $exceptionDetails = $e->getMessage();
+            $response = ApiResponse::error($exceptionDetails);
+            Log::error('Exception ', ['Error Message' => $exceptionDetails, 'Current Action' => Route::getCurrentRoute()->getActionName()]);
+        }
+
+        return $response;
+    }
+
+    /**
      * Update a admin.
      *
      * @param  array  $inputs
@@ -241,8 +287,9 @@ class SiteUserRepository extends BaseRepository
     public function update($inputs, $user)
     {
         try {
-            $save = $this->save($user, $inputs);
-            if ($save) {
+            $user = $this->save($inputs, $user);
+
+            if ($user) {
                 $response['redirect'] = URL::to('admin/site-user');
                 $response['status'] = 'success';
                 $response['message'] = trans('admin::controller/user.updated');
@@ -261,6 +308,33 @@ class SiteUserRepository extends BaseRepository
 
             return $response;
         }
+    }
+
+    /**
+     * Update a admin.
+     *
+     * @param  array  $inputs
+     * @param  Modules\Admin\Models\User $user
+     * @return void
+     */
+    public function updateUser($inputs, $modelObj)
+    {
+        try {
+            foreach ($inputs as $key => $value) {
+                if (isset($modelObj->$key)) {
+                    $modelObj->$key = $value;
+                }
+            }
+            $modelObj->save();
+
+            $response = ApiResponse::json($modelObj);
+        } catch (Exception $e) {
+            $exceptionDetails = $e->getMessage();
+            $response = ApiResponse::error($exceptionDetails);
+            Log::error('Exception ', ['Error Message' => $exceptionDetails, 'Current Action' => Route::getCurrentRoute()->getActionName()]);
+        }
+
+        return $response;
     }
 
     /**
@@ -330,8 +404,8 @@ class SiteUserRepository extends BaseRepository
     public function getUserIdByUsername($userName)
     {
         $cacheKey = str_replace(['\\'], [''], __METHOD__) . ':' . md5($userName);
-        $response = Cache::tags(User::table())->remember($cacheKey, $this->ttlCache, function() use ($userName) {
-            $user = User::where('email', $userName)->get()->first();
+        $response = Cache::tags($this->model->table())->remember($cacheKey, $this->ttlCache, function() use ($userName) {
+            $user = $this->model->where('email', $userName)->get()->first();
             if (!empty($user)) {
                 $data = $user->toArray();
                 return $data['id'];
@@ -339,5 +413,44 @@ class SiteUserRepository extends BaseRepository
         });
 
         return $response;
+    }
+
+    public function getLoginRules($inputs)
+    {
+        $accountType = ($inputs['account_type']) ? $inputs['account_type'] : 0;
+        switch ($accountType) {
+            case 1:
+                return [
+                    'facebook_id' => 'required',
+                    'access_token' => 'required'
+                ];
+            case 2:
+                return [
+                    'googleplus_id' => 'required',
+                    'access_token' => 'required'
+                ];
+            default:
+                return [
+                    'email' => 'required',
+                    'password' => 'required'
+                ];
+        }
+    }
+
+    public function getLoginUser($inputs)
+    {
+        $accountType = ($inputs['account_type']) ? $inputs['account_type'] : 0;
+        switch ($accountType) {
+            case 1:
+                return $this->model->where('facebook_id', $inputs['facebook_id'])->first();
+            case 2:
+                return $this->model->where('googleplus_id', $inputs['googleplus_id'])->first();
+            default:
+                $user = $this->model->where('email', $inputs['email'])->first();
+                if (!empty($user->password) && \Hash::check($inputs['password'], $user->password)) {
+                    return $user;
+                }
+                return false;
+        }
     }
 }

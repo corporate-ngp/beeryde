@@ -62,6 +62,8 @@ class AdminServiceProvider extends ServiceProvider
         $router->middleware('admin', \Modules\Admin\Http\Middleware\IsAdmin::class);
         $router->middleware('acl', \Modules\Admin\Http\Middleware\CheckPermission::class);
         $router->middleware('guestAdmin', \Modules\Admin\Http\Middleware\RedirectIfAuthenticated::class);
+        $router->middleware('forbidden', \Modules\Admin\Http\Middleware\Forbidden::class);
+        $router->middleware('authorise', \Modules\Admin\Http\Middleware\Authorise::class);
     }
 
     /**

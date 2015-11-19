@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Admin\Http\Controllers;
+namespace Modules\Api\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Routing\Controller as BaseController;
@@ -19,7 +19,6 @@ abstract class Controller extends BaseController
      */
     public function __construct()
     {
-        $this->middleware('authAdmin');
         $this->middleware('forbidden');
     }
 }

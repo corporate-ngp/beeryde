@@ -3,43 +3,29 @@
  * To present User Model with associated authentication
  * 
  * @author NGP <corporate.ngp@gmail.com>
- * @package Api 
+ * @package Admin
  */
-namespace Modules\Api\Models;
-
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+namespace Modules\Admin\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Api\Models\BaseModel;
+use Modules\Admin\Models\BaseModel;
 
-class User extends BaseModel implements AuthenticatableContract, CanResetPasswordContract
+class Ride extends BaseModel
 {
 
-    use Authenticatable,
-        CanResetPassword,
-        SoftDeletes;
+    use SoftDeletes;
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'users';
+    protected $table = 'rides';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'contact', 'status'];
-
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = ['password', 'remember_token'];
+    protected $fillable = ['user_id', 'ride_from', 'ride_to', 'price', 'status'];
 
     /**
      * Serves as a "black-list" instead of a "white-list":
@@ -56,13 +42,17 @@ class User extends BaseModel implements AuthenticatableContract, CanResetPasswor
     //protected $softDelete = true;
     protected $dates = ['deleted_at'];
     
-    /**
+    
+     /**
      * Rules to validate input parameters for updating user parameters
      *
      * @var array
      */
     protected static $updateRules = array(
-        'email' => 'exists:users'
+        'user_id' => 'required',
+        'ride_from' => 'required',
+        'ride_to' => 'required',
+        'price' => 'required'
     );
     
     /**
@@ -71,10 +61,10 @@ class User extends BaseModel implements AuthenticatableContract, CanResetPasswor
      * @var array
      */
     protected static $createRules = array(
-        'email' => 'exists:users',
-        'contact' => 'exists:users',
-        'facebook_id' => 'exists:users',
-        'googleplus_id' => 'exists:users'
+        'user_id' => 'required',
+        'ride_from' => 'required',
+        'ride_to' => 'required',
+        'price' => 'required'
     );
     
     /**

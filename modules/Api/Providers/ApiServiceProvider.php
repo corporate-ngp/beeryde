@@ -1,5 +1,6 @@
 <?php namespace Modules\Api\Providers;
 
+use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 
 class ApiServiceProvider extends ServiceProvider {
@@ -16,11 +17,13 @@ class ApiServiceProvider extends ServiceProvider {
 	 * 
 	 * @return void
 	 */
-	public function boot()
+	public function boot(Router $router)
 	{
 		$this->registerConfig();
 		$this->registerTranslations();
 		$this->registerViews();
+        
+        $this->registerMiddleware($router);
 	}
 
 	/**
@@ -33,6 +36,17 @@ class ApiServiceProvider extends ServiceProvider {
 		//
 	}
 
+    /**
+     * Register Middleware.
+     *
+     * @return void
+     */
+    protected function registerMiddleware($router)
+    {
+        $router->middleware('forbidden', \Modules\Admin\Http\Middleware\Forbidden::class);
+        $router->middleware('authorise', \Modules\Admin\Http\Middleware\Authorise::class);
+    }
+    
 	/**
 	 * Register config.
 	 * 

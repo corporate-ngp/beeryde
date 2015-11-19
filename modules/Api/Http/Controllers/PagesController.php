@@ -8,7 +8,6 @@
  */
 namespace Modules\Api\Http\Controllers;
 
-use Pingpong\Modules\Routing\Controller;
 use Modules\Admin\Repositories\PagesRepository;
 use Validator;
 use App\Libraries\ApiResponse;
@@ -34,6 +33,7 @@ class PagesController extends Controller
      */
     public function __construct(PagesRepository $repository)
     {
+        parent::__construct();
         $this->repository = $repository;
     }
 

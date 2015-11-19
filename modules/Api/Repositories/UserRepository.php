@@ -40,11 +40,11 @@ class UserRepository extends BaseRepository {
     }
 
     /**
-     * rules to be applied for update phone number
+     * rules to be applied for crewate user
      * @return array
      */
-    public static function getUpdatePhoneRules() {
-        return User::getUpdatePhoneRules();
+    public static function getCreateRules() {
+        return User::getCreateRules();
     }
 
     /**
@@ -96,82 +96,46 @@ class UserRepository extends BaseRepository {
     }
     
     /**
-     * To check if user is existing and is active
-     * @param string $countryCode
-     * @param string $phone
-     * @return boolean
+     * Store a Admin.
+     *
+     * @param  array $input
+     * @return void
      */
-    public function isActive($countryCode, $phone) {
-        $params = [];
-        $params['phone'] = $phone;
-        $params['country_code'] = $countryCode;
-        $cacheKey = str_replace(['\\'], [''], __METHOD__) . ':' . md5(json_encode($params));
-        $user = Cache::tags(User::table())->remember($cacheKey, $this->ttlCache, function() use ($countryCode, $phone) {
-            return $this->model->where('country_code', '=', $countryCode)->where('phone', '=', $phone)->where('is_active', '=', 1)->first();
-        });
-        return $this->isInstanceOf($user);
-    }
+    public function create($input)
+    {
 
-    /**
-     * To check is instanceof User
-     * @param object $user
-     * @return booelan
-     */
-    public function isInstanceOf($user) {
-        if (!($user instanceof User)) {
-            return false;
-        }
-        return $user;
-    }
-
-    /**
-     * To check if user is existing and is active and return user array
-     * @param string $countryCode
-     * @param string $phone
-     * @return object $user on successful false on failure
-     */
-    public function getExisting($countryCode, $phone) {
-        $params = [];
-        $params['phone'] = $phone;
-        $params['country_code'] = $countryCode;
-        $cacheKey = str_replace(['\\'], [''], __METHOD__) . ':' . md5(json_encode($params));
-        $user = Cache::tags(User::table())->remember($cacheKey, $this->ttlCache, function() use ($countryCode, $phone) {
-            return $this->model->where('country_code', '=', $countryCode)->where('phone', '=', $phone)->where('is_active', '=', 1)->first();
-        });
-        return $this->isInstanceOf($user);
-    }
-
-    /**
-     * To update login status of User
-     * @param array $paramsArr
-     * @param object $user
-     */
-    public function updateLogin($paramsArr, $user) {
-        foreach ($paramsArr as $column => $value) {
-            $user->$column = $value;
-        }
-        $user->save();
-    }
-
-    /**
-     * To update phone number of User
-     * 	@param new_country_code
-     *  @param new_phone
-     *  @param old_country_code - to check existance of old number
-     *  @param old_phone - to check existance of old number
-     *  @param otp_auth - send otp request to validate new phone number
-     *  @return boolean
-     */
-    public function updatePhone($newCountryCode, $newPhone, $oldCountryCode, $oldPhone, $otp) {
-        $response = false;
-        $user = $this->getExisting($oldCountryCode, $oldPhone);
-        if ($user) {
-            $user->country_code = $newCountryCode;
-            $user->phone = $newPhone;
+        try {
+            //create user
+            $input['password'] = (!empty($input['password'])) ? bcrypt($input['password']) : bcrypt(time());
+            $user = SiteUser::create($input);
+            $user->password = $input['password'];
             $user->save();
-            $response = true;
-        } 
-        return $response;
-    }
+            $this->updateAvatar($input, $user);
+            if ($user) {
+                if (isset($input['submit_save'])) {
+                    $userLabel = trans('admin::messages.user');
+                    $message = trans('admin::messages.added', ['name' => $userLabel]) . ' ' . trans('admin::messages.add-save-message', ['name' => $userLabel]);
+                    $response['redirect'] = URL::to('admin/site-user/create');
+                } else {
+                    $message = trans('admin::controller/user.created');
+                    $response['redirect'] = URL::to('admin/site-user');
+                }
+                $response['status'] = 'success';
+                $response['message'] = $message;
+            } else {
+                $response['status'] = 'error';
+                $response['message'] = trans('admin::messages.not-added', ['name' => trans('admin::messages.user')]);
+            }
 
+            return $response;
+        } catch (Exception $e) {
+
+            $exceptionDetails = $e->getMessage();
+            $response['status'] = 'error';
+            $response['message'] = trans('admin::messages.not-added', ['name' => trans('admin::messages.user')]) . "<br /><b> Error Details</b> - " . $exceptionDetails;
+            Log::error(trans('admin::messages.not-added', ['name' => trans('admin::messages.user')]), ['Error Message' => $exceptionDetails, 'Current Action' => Route::getCurrentRoute()->getActionName()]);
+
+            return $response;
+        }
+    }
 }

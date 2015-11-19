@@ -14,8 +14,8 @@ class CreateUserLinksTable extends Migration
     {
         Schema::create('user_links', function(Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->integer('user_id')->unsigned();
-            $table->integer('link_id')->unsigned();
+            $table->integer('user_id')->unsigned()->index();
+            $table->integer('link_id')->unsigned()->index();
             $table->boolean('is_add')->default(false);
             $table->boolean('is_edit')->default(false);
             $table->boolean('is_delete')->default(false);

@@ -22,7 +22,6 @@ class AdminDatabaseSeeder extends Seeder
 
         $this->call('Modules\Admin\Database\Seeders\AdminsTableSeeder');
         $this->call('Modules\Admin\Database\Seeders\IpAddressesTableSeeder');
-        $this->call('Modules\Admin\Database\Seeders\UserLinksTableSeeder');
         $this->call('Modules\Admin\Database\Seeders\LinkCategoriesTableSeeder');
         $this->call('Modules\Admin\Database\Seeders\UserTypeTableSeeder');
         $this->call('Modules\Admin\Database\Seeders\LinksTableSeeder');
@@ -33,6 +32,8 @@ class AdminDatabaseSeeder extends Seeder
         $this->call('Modules\Admin\Database\Seeders\SystemEmailsTableSeeder');
         $this->call('Modules\Admin\Database\Seeders\SitePagesTableSeeder');
         $this->call('Modules\Admin\Database\Seeders\UsersTableSeeder');
+        $this->call('Modules\Admin\Database\Seeders\UserLinksTableSeeder');
+        $this->call('Modules\Admin\Database\Seeders\CarBrandsTableSeeder');
 
         //enable foreign key check for this connection after running seeders
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');

@@ -10,8 +10,6 @@ class SiteUserUpdateRequest extends Request
      */
     public function rules()
     {
-        dd($this->all());
-        $this->sanitize();
         $id = $this->site_user->id;
         return [
             'email' => 'max:100|email|unique:users,email,' . $id,

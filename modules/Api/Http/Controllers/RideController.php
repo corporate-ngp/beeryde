@@ -8,29 +8,19 @@
  */
 namespace Modules\Api\Http\Controllers;
 
-use Modules\Admin\Repositories\SiteUserRepository;
+use Modules\Admin\Repositories\RideRepository;
 use Validator;
 use App\Libraries\ApiResponse;
 use Input;
 use Exception;
 use Log;
 
-class UserController extends Controller
+class RideController extends Controller
 {
 
-    /**
-     * The UserRepository instance.
-     *
-     * @var Modules\Api\Repositories\UserRepository
-     */
     private $repository;
 
-    /**
-     * Create a new UserController instance.
-     * @param  Modules\Admin\Repositories\UserRepository $userRepo,
-     * @return void
-     */
-    public function __construct(SiteUserRepository $repository)
+    public function __construct(RideRepository $repository)
     {
         parent::__construct();
         $this->repository = $repository;
@@ -55,13 +45,13 @@ class UserController extends Controller
         }
     }
 
-    public function show($userId)
+    public function show($id)
     {
         try {
-            $id = (int) $userId;
-            $user = $this->repository->getById($id);
-            if (!empty($user)) {
-                return ApiResponse::json($user);
+            $id = (int) $id;
+            $data = $this->repository->getById($id);
+            if (!empty($data)) {
+                return ApiResponse::json($data);
             } else {
                 return ApiResponse::error("Can't fetch, Not valid record.");
             }
@@ -76,7 +66,7 @@ class UserController extends Controller
             $inputs = Input::all();
             $validator = Validator::make($inputs, $this->repository->getCreateRules());
             if ($validator->passes()) {
-                return $this->repository->createUser($inputs);
+                return $this->repository->create($inputs);
             } else {
                 return ApiResponse::validation($validator);
             }
@@ -94,7 +84,7 @@ class UserController extends Controller
             $user = $this->repository->getById($id);
             $validator = Validator::make($inputs, $this->repository->getUpdateRules());
             if ($validator->passes()) {
-                return $this->repository->updateUser($inputs, $user);
+                return $this->repository->update($inputs, $user);
             } else {
                 return ApiResponse::validation($validator);
             }
@@ -107,9 +97,9 @@ class UserController extends Controller
     {
         try {
             $id = (int) $id;
-            $user = $this->repository->getByIdWithTrashed($id);
-            if (!empty($user)) {
-                $user->delete();
+            $data = $this->repository->getByIdWithTrashed($id);
+            if (!empty($data)) {
+                $data->delete();
                 return ApiResponse::json('Record deleted.');
             } else {
                 return ApiResponse::error("Can't delete, Record not found.");
@@ -119,60 +109,4 @@ class UserController extends Controller
         }
     }
 
-    public function logout()
-    {
-        try {
-            
-        } catch (Exception $e) {
-            Log::info(str_replace(['\\'], [''], __METHOD__), ['error_message' => $e->getMessage()]);
-        }
-    }
-
-    public function login()
-    {
-        try {
-            $inputs = Input::all();
-            $validator = Validator::make($inputs, $this->repository->getLoginRules($inputs));
-            if ($validator->passes()) {
-                
-                $user = $this->repository->getLoginUser($inputs);
-                if(!empty($user)){
-                    return ApiResponse::json($user);
-                }else{
-                    return ApiResponse::error("Invalid login credentials or user deos not exists.");
-                }
-            } else {
-                return ApiResponse::validation($validator);
-            }
-        } catch (Exception $e) {
-            Log::info(str_replace(['\\'], [''], __METHOD__), ['error_message' => $e->getMessage()]);
-        }
-    }
-
-    public function sendOtp()
-    {
-        try {
-            
-        } catch (Exception $e) {
-            Log::info(str_replace(['\\'], [''], __METHOD__), ['error_message' => $e->getMessage()]);
-        }
-    }
-
-    public function sendEmail()
-    {
-        try {
-            
-        } catch (Exception $e) {
-            Log::info(str_replace(['\\'], [''], __METHOD__), ['error_message' => $e->getMessage()]);
-        }
-    }
-
-    public function confirmEmail($token)
-    {
-        try {
-            
-        } catch (Exception $e) {
-            Log::info(str_replace(['\\'], [''], __METHOD__), ['error_message' => $e->getMessage()]);
-        }
-    }
 }
