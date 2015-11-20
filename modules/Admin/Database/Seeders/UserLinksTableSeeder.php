@@ -15,7 +15,9 @@ class UserLinksTableSeeder extends Seeder
     public function run()
     {
         Model::unguard();
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         DB::table('user_links')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         DB::unprepared(file_get_contents(__DIR__ . '/user_links.sql'));
     }
 }

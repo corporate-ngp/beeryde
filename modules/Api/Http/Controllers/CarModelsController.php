@@ -17,7 +17,7 @@ use Input;
 use Exception;
 use Log;
 
-class UserController extends Controller
+class CarModelsController extends Controller
 {
 
     /**
@@ -36,7 +36,6 @@ class UserController extends Controller
     public function __construct(SiteUserRepository $repository, UserTokenRepository $userTokenRepository)
     {
         parent::__construct();
-        $this->middleware('authenticate', ['except' => ['store', 'login', 'logout', 'sendEmail', 'sendOtp']]);
         $this->repository = $repository;
         $this->userTokenRepo = $userTokenRepository;
     }
@@ -124,6 +123,15 @@ class UserController extends Controller
         }
     }
 
+    public function logout()
+    {
+        try {
+            
+        } catch (Exception $e) {
+            Log::info(str_replace(['\\'], [''], __METHOD__), ['error_message' => $e->getMessage()]);
+        }
+    }
+
     public function login()
     {
         try {
@@ -132,7 +140,6 @@ class UserController extends Controller
             if ($validator->passes()) {
                 
                 $user = $this->repository->getLoginUser($inputs);
-                
                 if(!empty($user)){
                     return $this->userTokenRepo->create(['user_id' =>$user->id, 'token' => Helper::generateUserToken($user->id)]);
                 }else{
@@ -146,16 +153,6 @@ class UserController extends Controller
         }
     }
 
-    public function logout()
-    {
-        try {
-            $this->userTokenRepo->detroyToken();
-            return ApiResponse::json('Logout successfully.');
-        } catch (Exception $e) {
-            Log::info(str_replace(['\\'], [''], __METHOD__), ['error_message' => $e->getMessage()]);
-        }
-    }
-    
     public function sendOtp()
     {
         try {

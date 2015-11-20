@@ -1,12 +1,10 @@
-<?php
-
-namespace Modules\Admin\Database\Seeders;
+<?php namespace Modules\Admin\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class IpAddressesTableSeeder extends Seeder
+class CarBrandsTableSeeder extends Seeder
 {
 
     /**
@@ -18,8 +16,8 @@ class IpAddressesTableSeeder extends Seeder
     {
         Model::unguard();
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        DB::table('ip_addresses')->truncate();
+        DB::table('car_brands')->truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-        DB::unprepared(file_get_contents(__DIR__ . '/ip_addresses.sql'));
+        DB::unprepared(file_get_contents(__DIR__ . '/car_brands.sql'));
     }
 }

@@ -41,7 +41,7 @@ class SiteUserController extends Controller
     SiteUserRepository $repository)
     {
         parent::__construct();
-        $this->middleware('acl');
+        //$this->middleware('acl');
         $this->repository = $repository;
     }
 

@@ -55,4 +55,47 @@ class SiteUser extends BaseModel implements AuthenticatableContract, CanResetPas
      */
     //protected $softDelete = true;
     protected $dates = ['deleted_at'];
+    
+    
+     /**
+     * Rules to validate input parameters for updating user parameters
+     *
+     * @var array
+     */
+    protected static $updateRules = array(
+        'email' => 'exists:users',
+        'contact' => 'exists:users',
+        'facebook_id' => 'exists:users',
+        'googleplus_id' => 'exists:users'
+    );
+    
+    /**
+     * Rules to validate input parameters for updating user parameters
+     *
+     * @var array
+     */
+    protected static $createRules = array(
+        'email' => 'unique:users',
+        'contact' => 'unique:users',
+        'facebook_id' => 'unique:users',
+        'googleplus_id' => 'unique:users'
+    );
+    
+    /**
+     * To get the rules to validate input parameters to update user
+     *
+     * @return array
+     */
+    public static function getUpdateRules() {
+        return self::$updateRules;
+    }
+    
+    /**
+     * To get the rules to validate input parameters to create user
+     *
+     * @return array
+     */
+    public static function getCreateRules() {
+        return self::$createRules;
+    }
 }

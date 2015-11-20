@@ -10,8 +10,7 @@
 
 namespace Modules\Api\Http\Controllers;
 
-use Pingpong\Modules\Routing\Controller,
-    \Modules\Api\Repositories\RatingRepository as RatingRepo,    
+use \Modules\Api\Repositories\RatingRepository as RatingRepo,    
     App\Libraries\ApiResponse,
     Validator,
     Input;
@@ -33,6 +32,7 @@ class RatingController extends Controller {
      * @return void
      */
     public function __construct(RatingRepository $ratingRepo) {
+        parent::__construct();
         $this->ratingRepo = $ratingRepo;       
     }
     

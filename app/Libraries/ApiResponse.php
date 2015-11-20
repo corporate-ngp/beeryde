@@ -16,7 +16,7 @@ class ApiResponse extends Response {
 
     private static $response = [
         'success' => true,
-        'data' => [],
+        'payload' => [],
         'error' => [
             'code' => 0,
             'message' => ''
@@ -66,15 +66,16 @@ class ApiResponse extends Response {
     public static function json($data = [], $status = 200, array $headers = [], $options = 0) {
         $return = self::$response;
 
-        $return['data'] = $data;
+        $return['payload'] = $data;
 
         return parent::json($return, $status, $headers);
     }
 
-    public static function error($message = '', $status = 412, array $headers = [], $options = 0) {
+    public static function error($message = '', $errorCode=0, $status = 412, array $headers = [], $options = 0) {
         $return = self::$response;
 
         $return['success'] = false;
+        $return['error']['code'] = $errorCode;
         $return['error']['message'] = $message;
 
         return parent::json($return, $status, $headers);
