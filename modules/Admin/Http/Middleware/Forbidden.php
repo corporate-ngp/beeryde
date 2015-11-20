@@ -3,6 +3,7 @@
 namespace Modules\Admin\Http\Middleware;
 
 use Closure;
+use App\Libraries\ApiResponse;
 
 class Forbidden
 {
@@ -22,7 +23,7 @@ class Forbidden
         }
 
         if ($request->ajax()) {
-            abort(403);
+            return ApiResponse::error('Forbidden', '', 403);
         } else {
             return view('admin::errors.403');
         }

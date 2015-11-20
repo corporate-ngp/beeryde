@@ -226,7 +226,6 @@ class SiteUserRepository extends BaseRepository
 
         try {
             //create user
-            $inputs['password'] = (!empty($inputs['password'])) ? bcrypt($inputs['password']) : bcrypt(time());
             $user = $this->save($inputs);
             if ($user) {
                 if (isset($inputs['submit_save'])) {
@@ -265,7 +264,6 @@ class SiteUserRepository extends BaseRepository
     public function createUser($inputs)
     {
         try {
-            $inputs['password'] = (!empty($inputs['password'])) ? bcrypt($inputs['password']) : bcrypt(time());
             $user = $this->save($inputs);
             $response = ApiResponse::json($user);
         } catch (Exception $e) {
@@ -371,7 +369,7 @@ class SiteUserRepository extends BaseRepository
             }
             $user->avatar = ImageHelper::uploadUserAvatar($inputs['avatar'], $user);
             $user->save();
-        } else if ($inputs['remove'] == 'remove') {
+        } else if (!empty($inputs['remove']) && ($inputs['remove'] == 'remove')) {
             $user->avatar = '';
             $user->save();
         } else {
@@ -417,7 +415,7 @@ class SiteUserRepository extends BaseRepository
 
     public function getLoginRules($inputs)
     {
-        $accountType = ($inputs['account_type']) ? $inputs['account_type'] : 0;
+        $accountType = (isset($inputs['account_type'])) ? $inputs['account_type'] : 0;
         switch ($accountType) {
             case 1:
                 return [
@@ -439,7 +437,7 @@ class SiteUserRepository extends BaseRepository
 
     public function getLoginUser($inputs)
     {
-        $accountType = ($inputs['account_type']) ? $inputs['account_type'] : 0;
+        $accountType = (isset($inputs['account_type'])) ? $inputs['account_type'] : 0;
         switch ($accountType) {
             case 1:
                 return $this->model->where('facebook_id', $inputs['facebook_id'])->first();
