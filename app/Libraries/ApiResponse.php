@@ -29,7 +29,9 @@ class ApiResponse extends Response {
      * 	@param array $headers Additional header to append to the request
      * 	@return json String or Array representation of the validation errors
      */
-    public static function validation(Validator $validator, $stringify = false, $status = '412', $headers = array()) {
+    
+    //change $status = '412 to $status = 200
+    public static function validation(Validator $validator, $stringify = false, $status = '200', $headers = array()) {
         $return = self::$response;
         if ($validator->fails()) {
             $errors = $validator->messages()->toArray();
@@ -71,7 +73,8 @@ class ApiResponse extends Response {
         return parent::json($return, $status, $headers);
     }
 
-    public static function error($message = '', $errorCode=0, $status = 412, array $headers = [], $options = 0) {
+    //modified code $status = 412 to $status = 200
+    public static function error($message = '', $errorCode=0, $status = 200, array $headers = [], $options = 0) {
         $return = self::$response;
 
         $return['success'] = false;
