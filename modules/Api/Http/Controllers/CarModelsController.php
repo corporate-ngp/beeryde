@@ -8,9 +8,7 @@
  */
 namespace Modules\Api\Http\Controllers;
 
-use Modules\Admin\Repositories\SiteUserRepository;
-use Modules\Admin\Repositories\UserTokenRepository;
-use Modules\Admin\Services\Helper\Helper;
+use Modules\Admin\Repositories\CarModelRepository as MyRepository;
 use Validator;
 use App\Libraries\ApiResponse;
 use Input;
@@ -22,22 +20,17 @@ class CarModelsController extends Controller
 
     /**
      * The UserRepository instance.
-     *
-     * @var Modules\Api\Repositories\UserRepository
      */
     private $repository;
-    private $userTokenRepo;
 
     /**
-     * Create a new UserController instance.
-     * @param  Modules\Admin\Repositories\UserRepository $userRepo,
+     * Create a new Controller instance.
      * @return void
      */
-    public function __construct(SiteUserRepository $repository, UserTokenRepository $userTokenRepository)
+    public function __construct(MyRepository $repository)
     {
         parent::__construct();
         $this->repository = $repository;
-        $this->userTokenRepo = $userTokenRepository;
     }
 
     /**
@@ -48,9 +41,9 @@ class CarModelsController extends Controller
     public function index()
     {
         try {
-            $users = $this->repository->data();
-            if (!empty($users)) {
-                return ApiResponse::json($users);
+            $myObj = $this->repository->data();
+            if (!empty($myObj)) {
+                return ApiResponse::json($myObj);
             } else {
                 return ApiResponse::error('Listing not available.');
             }
@@ -59,13 +52,13 @@ class CarModelsController extends Controller
         }
     }
 
-    public function show($userId)
+    public function show($listId)
     {
         try {
-            $id = (int) $userId;
-            $user = $this->repository->getById($id);
-            if (!empty($user)) {
-                return ApiResponse::json($user);
+            $id = (int) $listId;
+            $myObj = $this->repository->show($id);
+            if (!empty($myObj)) {
+                return ApiResponse::json($myObj);
             } else {
                 return ApiResponse::error("Can't fetch, Not valid record.");
             }
@@ -80,7 +73,7 @@ class CarModelsController extends Controller
             $inputs = Input::all();
             $validator = Validator::make($inputs, $this->repository->getCreateRules());
             if ($validator->passes()) {
-                return $this->repository->createUser($inputs);
+                return $this->repository->create($inputs);
             } else {
                 return ApiResponse::validation($validator);
             }
@@ -89,16 +82,15 @@ class CarModelsController extends Controller
         }
     }
 
-    public function update($id)
+    public function update($listId)
     {
         try {
             $inputs = Input::all();
-
-            $id = (int) $id;
-            $user = $this->repository->getById($id);
+            $id = (int) $listId;
+            $myObj = $this->repository->getById($id);
             $validator = Validator::make($inputs, $this->repository->getUpdateRules());
             if ($validator->passes()) {
-                return $this->repository->updateUser($inputs, $user);
+                return $this->repository->update($inputs, $myObj);
             } else {
                 return ApiResponse::validation($validator);
             }
@@ -107,76 +99,19 @@ class CarModelsController extends Controller
         }
     }
 
-    public function destroy($id)
-    {
-        try {
-            $id = (int) $id;
-            $user = $this->repository->getByIdWithTrashed($id);
-            if (!empty($user)) {
-                $user->delete();
-                return ApiResponse::json('Record deleted.');
-            } else {
-                return ApiResponse::error("Can't delete, Record not found.");
-            }
-        } catch (Exception $e) {
-            Log::info(str_replace(['\\'], [''], __METHOD__), ['error_message' => $e->getMessage()]);
-        }
-    }
-
-    public function logout()
-    {
-        try {
-            
-        } catch (Exception $e) {
-            Log::info(str_replace(['\\'], [''], __METHOD__), ['error_message' => $e->getMessage()]);
-        }
-    }
-
-    public function login()
-    {
-        try {
-            $inputs = Input::all();
-            $validator = Validator::make($inputs, $this->repository->getLoginRules($inputs));
-            if ($validator->passes()) {
-                
-                $user = $this->repository->getLoginUser($inputs);
-                if(!empty($user)){
-                    return $this->userTokenRepo->create(['user_id' =>$user->id, 'token' => Helper::generateUserToken($user->id)]);
-                }else{
-                    return ApiResponse::error("Invalid login credentials or user does not exists.");
-                }
-            } else {
-                return ApiResponse::validation($validator);
-            }
-        } catch (Exception $e) {
-            Log::info(str_replace(['\\'], [''], __METHOD__), ['error_message' => $e->getMessage()]);
-        }
-    }
-
-    public function sendOtp()
-    {
-        try {
-            
-        } catch (Exception $e) {
-            Log::info(str_replace(['\\'], [''], __METHOD__), ['error_message' => $e->getMessage()]);
-        }
-    }
-
-    public function sendEmail()
-    {
-        try {
-            
-        } catch (Exception $e) {
-            Log::info(str_replace(['\\'], [''], __METHOD__), ['error_message' => $e->getMessage()]);
-        }
-    }
-
-    public function confirmEmail($token)
-    {
-        try {
-            
-        } catch (Exception $e) {
-            Log::info(str_replace(['\\'], [''], __METHOD__), ['error_message' => $e->getMessage()]);
-        }
-    }
+//    public function destroy($listId)
+//    {
+//        try {
+//            $id = (int) $listId;
+//            $myObj = $this->repository->getById($id);
+//            if (!empty($myObj)) {
+//                $myObj->delete();
+//                return ApiResponse::json('Record deleted.');
+//            } else {
+//                return ApiResponse::error("Can't delete, Record not found.");
+//            }
+//        } catch (Exception $e) {
+//            Log::info(str_replace(['\\'], [''], __METHOD__), ['error_message' => $e->getMessage()]);
+//        }
+//    }
 }
