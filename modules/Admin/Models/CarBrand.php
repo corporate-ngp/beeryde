@@ -7,39 +7,23 @@
  */
 namespace Modules\Admin\Models;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Admin\Models\BaseModel;
 
-class SiteUser extends BaseModel implements AuthenticatableContract, CanResetPasswordContract
+class CarBrand extends BaseModel 
 {
-
-    use Authenticatable,
-        CanResetPassword,
-        SoftDeletes;
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'users';
+    protected $table = 'car_brands';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'contact', 'status'];
-
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = ['password', 'remember_token'];
+    protected $fillable = ['brand_name', 'status'];
 
     /**
      * Serves as a "black-list" instead of a "white-list":
@@ -47,15 +31,7 @@ class SiteUser extends BaseModel implements AuthenticatableContract, CanResetPas
      *  @var array
      */
     protected $guarded = ['id'];
-
-    /**
-     * Enables soft delete to
-     * 
-     *  @var array
-     */
-    //protected $softDelete = true;
-    protected $dates = ['deleted_at'];
-    
+  
     
      /**
      * Rules to validate input parameters for updating user parameters
@@ -63,10 +39,7 @@ class SiteUser extends BaseModel implements AuthenticatableContract, CanResetPas
      * @var array
      */
     protected static $updateRules = array(
-        'email' => 'exists:users',
-        'contact' => 'exists:users',
-        'facebook_id' => 'exists:users',
-        'googleplus_id' => 'exists:users'
+        'brand_name' => 'unique:car_brands'
     );
     
     /**
@@ -75,10 +48,7 @@ class SiteUser extends BaseModel implements AuthenticatableContract, CanResetPas
      * @var array
      */
     protected static $createRules = array(
-        'email' => 'unique:users',
-        'contact' => 'unique:users',
-        'facebook_id' => 'unique:users',
-        'googleplus_id' => 'unique:users'
+        'brand_name' => 'required|unique:car_brands'
     );
     
     /**

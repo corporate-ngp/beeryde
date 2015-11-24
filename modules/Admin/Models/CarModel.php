@@ -7,39 +7,24 @@
  */
 namespace Modules\Admin\Models;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Admin\Models\BaseModel;
 
-class SiteUser extends BaseModel implements AuthenticatableContract, CanResetPasswordContract
+class CarModel extends BaseModel
 {
 
-    use Authenticatable,
-        CanResetPassword,
-        SoftDeletes;
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'users';
+    protected $table = 'car_models';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'contact', 'status'];
-
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = ['password', 'remember_token'];
+    protected $fillable = ['model_name', 'car_brand_id', 'status'];
 
     /**
      * Serves as a "black-list" instead of a "white-list":
@@ -49,53 +34,52 @@ class SiteUser extends BaseModel implements AuthenticatableContract, CanResetPas
     protected $guarded = ['id'];
 
     /**
-     * Enables soft delete to
-     * 
-     *  @var array
-     */
-    //protected $softDelete = true;
-    protected $dates = ['deleted_at'];
-    
-    
-     /**
      * Rules to validate input parameters for updating user parameters
      *
      * @var array
      */
     protected static $updateRules = array(
-        'email' => 'exists:users',
-        'contact' => 'exists:users',
-        'facebook_id' => 'exists:users',
-        'googleplus_id' => 'exists:users'
+        'model_name' => 'unique:car_models',
+        'car_brand_id' => 'required'
     );
-    
+
     /**
      * Rules to validate input parameters for updating user parameters
      *
      * @var array
      */
     protected static $createRules = array(
-        'email' => 'unique:users',
-        'contact' => 'unique:users',
-        'facebook_id' => 'unique:users',
-        'googleplus_id' => 'unique:users'
+        'model_name' => 'required|unique:car_models',
+        'car_brand_id' => 'required'
     );
-    
+
     /**
      * To get the rules to validate input parameters to update user
      *
      * @return array
      */
-    public static function getUpdateRules() {
+    public static function getUpdateRules()
+    {
         return self::$updateRules;
     }
-    
+
     /**
      * To get the rules to validate input parameters to create user
      *
      * @return array
      */
-    public static function getCreateRules() {
+    public static function getCreateRules()
+    {
         return self::$createRules;
+    }
+
+    /**
+     * get user details
+     * 
+     * @return type
+     */
+    public function carBrands()
+    {
+        return $this->belongsTo('Modules\Admin\Models\CarBrand', 'car_brand_id', 'id');
     }
 }
