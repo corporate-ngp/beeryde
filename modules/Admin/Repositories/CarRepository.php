@@ -88,7 +88,7 @@ class CarRepository extends BaseRepository
             }
 
             $carUser = User::find($inputs['user_id']);
-            $model->carModel()->associate($carUser);
+            $model->user()->associate($carUser);
             
             $carModel = CarModel::find($inputs['car_model_id']);
             $model->carModel()->associate($carModel);
@@ -123,7 +123,7 @@ class CarRepository extends BaseRepository
                 }
             }
             $carUser = User::find($inputs['user_id']);
-            $model->carModel()->associate($carUser);
+            $model->user()->associate($carUser);
             
             $carModel = CarModel::find($inputs['car_model_id']);
             $model->carModel()->associate($carModel);
@@ -155,11 +155,8 @@ class CarRepository extends BaseRepository
         try {
             $model = $this->getById($id);
             
-            $childTable = CarBrand::find($model->car_brand_id);
-            $model->carBrand()->associate($childTable);
-            
             $carUser = User::find($model->user_id);
-            $model->carModel()->associate($carUser);
+            $model->user()->associate($carUser);
             
             $carModel = CarModel::find($model->car_model_id);
             $model->carModel()->associate($carModel);
