@@ -9,7 +9,7 @@ namespace Modules\Admin\Models;
 
 use Modules\Admin\Models\BaseModel;
 
-class CarModel extends BaseModel
+class Car extends BaseModel
 {
 
     /**
@@ -17,14 +17,14 @@ class CarModel extends BaseModel
      *
      * @var string
      */
-    protected $table = 'car_models';
+    protected $table = 'cars';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['model_name', 'car_brand_id', 'status'];
+    protected $fillable = ['user_id', 'car_model_id', 'car_brand_id', 'color', 'comfort', 'seats', 'registration_number', 'status'];
 
     /**
      * Serves as a "black-list" instead of a "white-list":
@@ -39,8 +39,13 @@ class CarModel extends BaseModel
      * @var array
      */
     protected static $updateRules = array(
-        'model_name' => 'unique:car_models',
-        'car_brand_id' => 'required'
+        'user_id' => 'required',
+        'car_brand_id' => 'required',
+        'car_model_id' => 'required',
+        'color' => 'required',
+        'comfort' => 'required',
+        'seats' => 'required',
+        'registration_number' => 'required'
     );
 
     /**
@@ -49,8 +54,13 @@ class CarModel extends BaseModel
      * @var array
      */
     protected static $createRules = array(
-        'model_name' => 'required|unique:car_models',
-        'car_brand_id' => 'required'
+        'user_id' => 'required',
+        'car_brand_id' => 'required',
+        'car_model_id' => 'required',
+        'color' => 'required',
+        'comfort' => 'required',
+        'seats' => 'required',
+        'registration_number' => 'required'
     );
 
     /**
@@ -81,5 +91,25 @@ class CarModel extends BaseModel
     public function carBrand()
     {
         return $this->belongsTo('Modules\Admin\Models\CarBrand', 'car_brand_id', 'id');
+    }
+    
+    /**
+     * get user details
+     * function name is used as it while joining with child table
+     * @return type
+     */
+    public function carModel()
+    {
+        return $this->belongsTo('Modules\Admin\Models\CarModel', 'car_model_id', 'id');
+    }
+    
+    /**
+     * get user details
+     * function name is used as it while joining with child table
+     * @return type
+     */
+    public function user()
+    {
+        return $this->belongsTo('Modules\Admin\Models\SiteUser', 'user_id', 'id');
     }
 }
