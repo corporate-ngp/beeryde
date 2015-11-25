@@ -8,15 +8,17 @@
  */
 namespace Modules\Admin\Repositories;
 
-use Modules\Admin\Models\CarModel as MyModel;
+use Modules\Admin\Models\Car as MyModel;
+use Modules\Admin\Models\CarModel;
 use Modules\Admin\Models\CarBrand;
+use Modules\Admin\Models\SiteUser as User;
 use App\Libraries\ApiResponse;
 use Exception;
 use Route;
 use Log;
 use Cache;
 
-class CarModelRepository extends BaseRepository
+class CarRepository extends BaseRepository
 {
 
     protected $ttlCache = 60; // minutes to leave Cache
@@ -61,8 +63,8 @@ class CarModelRepository extends BaseRepository
     {
         //Cache::tags($this->model->table(), CarBrand::table())->flush();
         $cacheKey = str_replace(['\\'], [''], __METHOD__) . ':' . md5(json_encode($params));
-        $response = Cache::tags($this->model->table(), CarBrand::table())->remember($cacheKey, $this->ttlCache, function() {
-            return MyModel::with('CarBrand')->where('status',1)->orderBy('car_brand_id')->get();
+        $response = Cache::tags($this->model->table(), CarModel::table(), CarBrand::table())->remember($cacheKey, $this->ttlCache, function() {
+            return MyModel::with('User', 'CarModel', 'CarBrand')->where('status',1)->orderBy('user_id', 'car_model_id', 'car_brand_id')->get();
         });
 
         return $response;
@@ -85,8 +87,15 @@ class CarModelRepository extends BaseRepository
                 }
             }
 
-            $childTable = CarBrand::find($inputs['car_brand_id']);
-            $model->carBrand()->associate($childTable);
+            $carUser = User::find($inputs['user_id']);
+            $model->user()->associate($carUser);
+            
+            $carModel = CarModel::find($inputs['car_model_id']);
+            $model->carModel()->associate($carModel);
+            
+            $carBrand = CarBrand::find($inputs['car_brand_id']);
+            $model->carBrand()->associate($carBrand);
+            
             $model->save();
             
             $response = ApiResponse::json($model);
@@ -113,8 +122,15 @@ class CarModelRepository extends BaseRepository
                     $model->$key = $value;
                 }
             }
-            $childTable = CarBrand::find($inputs['car_brand_id']);
-            $model->carBrand()->associate($childTable);
+            $carUser = User::find($inputs['user_id']);
+            $model->user()->associate($carUser);
+            
+            $carModel = CarModel::find($inputs['car_model_id']);
+            $model->carModel()->associate($carModel);
+            
+            $carBrand = CarBrand::find($inputs['car_brand_id']);
+            $model->carBrand()->associate($carBrand);
+            
             $model->save();
 
             $response = ApiResponse::json($model);
@@ -138,8 +154,16 @@ class CarModelRepository extends BaseRepository
         $model = [];
         try {
             $model = $this->getById($id);
-            $childTable = CarBrand::find($model->car_brand_id);
-            $model->carBrand()->associate($childTable);
+            
+            $carUser = User::find($model->user_id);
+            $model->user()->associate($carUser);
+            
+            $carModel = CarModel::find($model->car_model_id);
+            $model->carModel()->associate($carModel);
+            
+            $carBrand = CarBrand::find($model->car_brand_id);
+            $model->carBrand()->associate($carBrand);
+            
         } catch (Exception $e) {
             $exceptionDetails = $e->getMessage();
             Log::error('Exception ', ['Error Message' => $exceptionDetails, 'Current Action' => Route::getCurrentRoute()->getActionName()]);
