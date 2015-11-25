@@ -84,4 +84,24 @@ class Ride extends BaseModel
     public static function getCreateRules() {
         return self::$createRules;
     }
+    
+    /**
+     * get user details
+     * function name is used as it while joining with child table
+     * @return type
+     */
+    public function car()
+    {
+        return $this->belongsTo('Modules\Admin\Models\Car', 'car_id', 'id');
+    }
+    
+    /**
+     * get user details
+     * function name is used as it while joining with child table
+     * @return type
+     */
+    public function user()
+    {
+        return $this->belongsTo('Modules\Admin\Models\SiteUser', 'user_id', 'id');
+    }
 }

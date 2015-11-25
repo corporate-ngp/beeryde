@@ -63,7 +63,7 @@ class CarRepository extends BaseRepository
     {
         //Cache::tags($this->model->table(), CarBrand::table())->flush();
         $cacheKey = str_replace(['\\'], [''], __METHOD__) . ':' . md5(json_encode($params));
-        $response = Cache::tags($this->model->table(), CarModel::table(), CarBrand::table())->remember($cacheKey, $this->ttlCache, function() {
+        $response = Cache::tags($this->model->table(), CarModel::table(), CarBrand::table(), User::table())->remember($cacheKey, $this->ttlCache, function() {
             return MyModel::with('User', 'CarModel', 'CarBrand')->where('status',1)->orderBy('user_id', 'car_model_id', 'car_brand_id')->get();
         });
 
