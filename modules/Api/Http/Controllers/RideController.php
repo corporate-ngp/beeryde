@@ -8,7 +8,7 @@
  */
 namespace Modules\Api\Http\Controllers;
 
-use Modules\Admin\Repositories\RideRepository;
+use Modules\Admin\Repositories\RideRepository as MyRepository;
 use Validator;
 use App\Libraries\ApiResponse;
 use Input;
@@ -18,9 +18,16 @@ use Log;
 class RideController extends Controller
 {
 
+    /**
+     * The UserRepository instance.
+     */
     private $repository;
 
-    public function __construct(RideRepository $repository)
+    /**
+     * Create a new Controller instance.
+     * @return void
+     */
+    public function __construct(MyRepository $repository)
     {
         parent::__construct();
         $this->repository = $repository;
@@ -34,9 +41,9 @@ class RideController extends Controller
     public function index()
     {
         try {
-            $users = $this->repository->data();
-            if (!empty($users)) {
-                return ApiResponse::json($users);
+            $myObj = $this->repository->data();
+            if (!empty($myObj)) {
+                return ApiResponse::json($myObj);
             } else {
                 return ApiResponse::error('Listing not available.');
             }
@@ -45,13 +52,13 @@ class RideController extends Controller
         }
     }
 
-    public function show($id)
+    public function show($listId)
     {
         try {
-            $id = (int) $id;
-            $data = $this->repository->getById($id);
-            if (!empty($data)) {
-                return ApiResponse::json($data);
+            $id = (int) $listId;
+            $myObj = $this->repository->show($id);
+            if (!empty($myObj)) {
+                return ApiResponse::json($myObj);
             } else {
                 return ApiResponse::error("Can't fetch, Not valid record.");
             }
@@ -75,16 +82,15 @@ class RideController extends Controller
         }
     }
 
-    public function update($id)
+    public function update($listId)
     {
         try {
             $inputs = Input::all();
-
-            $id = (int) $id;
-            $user = $this->repository->getById($id);
+            $id = (int) $listId;
+            $myObj = $this->repository->getById($id);
             $validator = Validator::make($inputs, $this->repository->getUpdateRules());
             if ($validator->passes()) {
-                return $this->repository->update($inputs, $user);
+                return $this->repository->update($inputs, $myObj);
             } else {
                 return ApiResponse::validation($validator);
             }
@@ -93,13 +99,13 @@ class RideController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy($listId)
     {
         try {
-            $id = (int) $id;
-            $data = $this->repository->getByIdWithTrashed($id);
-            if (!empty($data)) {
-                $data->delete();
+            $id = (int) $listId;
+            $myObj = $this->repository->getById($id);
+            if (!empty($myObj)) {
+                $myObj->delete();
                 return ApiResponse::json('Record deleted.');
             } else {
                 return ApiResponse::error("Can't delete, Record not found.");
@@ -108,5 +114,4 @@ class RideController extends Controller
             Log::info(str_replace(['\\'], [''], __METHOD__), ['error_message' => $e->getMessage()]);
         }
     }
-
 }

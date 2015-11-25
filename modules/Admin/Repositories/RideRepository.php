@@ -4,11 +4,13 @@
  *
  *
  * @author NGP <corporate.ngp@gmail.com>
- * @package Admin
+ * @package Api
  */
 namespace Modules\Admin\Repositories;
 
-use Modules\Admin\Models\Ride;
+use Modules\Admin\Models\Ride as MyModel;
+use Modules\Admin\Models\Car;
+use Modules\Admin\Models\SiteUser as User;
 use App\Libraries\ApiResponse;
 use Exception;
 use Route;
@@ -21,13 +23,13 @@ class RideRepository extends BaseRepository
     protected $ttlCache = 60; // minutes to leave Cache
 
     /**
-     * Create a new UserRepository instance.
+     * Create a new Repository instance.
      *
-     * @param  Modules\Admin\Models\User $user
+     * @param  $model
      * @return void
      */
 
-    public function __construct(Ride $model)
+    public function __construct(MyModel $model)
     {
         $this->model = $model;
     }
@@ -38,7 +40,7 @@ class RideRepository extends BaseRepository
      */
     public static function getUpdateRules()
     {
-        return Ride::getUpdateRules();
+        return MyModel::getUpdateRules();
     }
 
     /**
@@ -47,7 +49,7 @@ class RideRepository extends BaseRepository
      */
     public static function getCreateRules()
     {
-        return Ride::getCreateRules();
+        return MyModel::getCreateRules();
     }
 
     /**
@@ -58,27 +60,24 @@ class RideRepository extends BaseRepository
      */
     public function data($params = [])
     {
-        //Cache::tags($this->model->table())->flush();
+        //Cache::tags($this->model->table(), CarBrand::table())->flush();
         $cacheKey = str_replace(['\\'], [''], __METHOD__) . ':' . md5(json_encode($params));
-        $response = Cache::tags($this->model->table())->remember($cacheKey, $this->ttlCache, function() {
-            return $this->model->select('*')->get();
+        $response = Cache::tags($this->model->table(), Car::table(), User::table())->remember($cacheKey, $this->ttlCache, function() {
+            return MyModel::with('User', 'Car')->where('status',1)->orderBy('user_id', 'car_id')->get();
         });
 
         return $response;
     }
 
     /**
-     * Store a Admin.
-     *
+     * Store a 
+     * 
      * @param  array $inputs
      * @return void
      */
     public function create($inputs)
     {
-
         try {
-            //create user
-            $inputs['password'] = (!empty($inputs['password'])) ? bcrypt($inputs['password']) : bcrypt(time());
             $model = new $this->model;
             $allColumns = $model->getTableColumns($model->getTable());
             foreach ($inputs as $key => $value) {
@@ -86,7 +85,15 @@ class RideRepository extends BaseRepository
                     $model->$key = $value;
                 }
             }
+
+            $carUser = User::find($inputs['user_id']);
+            $model->user()->associate($carUser);
+            
+            $carModel = Car::find($inputs['car_id']);
+            $model->car()->associate($carModel);
+            
             $model->save();
+            
             $response = ApiResponse::json($model);
         } catch (Exception $e) {
             $exceptionDetails = $e->getMessage();
@@ -98,23 +105,28 @@ class RideRepository extends BaseRepository
     }
 
     /**
-     * Update a admin.
+     * Update a record.
      *
      * @param  array  $inputs
-     * @param  Modules\Admin\Models\User $user
      * @return void
      */
-    public function update($inputs, $modelObj)
+    public function update($inputs, $model)
     {
         try {
             foreach ($inputs as $key => $value) {
-                if (isset($modelObj->$key)) {
-                    $modelObj->$key = $value;
+                if (isset($model->$key)) {
+                    $model->$key = $value;
                 }
             }
-            $modelObj->save();
+            $carUser = User::find($inputs['user_id']);
+            $model->user()->associate($carUser);
+            
+            $carModel = Car::find($inputs['car_id']);
+            $model->car()->associate($carModel);
+            
+            $model->save();
 
-            $response = ApiResponse::json($modelObj);
+            $response = ApiResponse::json($model);
         } catch (Exception $e) {
             $exceptionDetails = $e->getMessage();
             $response = ApiResponse::error($exceptionDetails);
@@ -123,4 +135,32 @@ class RideRepository extends BaseRepository
 
         return $response;
     }
+    
+        /**
+     * Store a 
+     * 
+     * @param  array $inputs
+     * @return void
+     */
+    public function show($id)
+    {
+        $model = [];
+        try {
+            $model = $this->getById($id);
+            
+            $carUser = User::find($model->user_id);
+            $model->user()->associate($carUser);
+            
+            $carModel = Car::find($model->car_model_id);
+            $model->car()->associate($carModel);
+            
+        } catch (Exception $e) {
+            $exceptionDetails = $e->getMessage();
+            Log::error('Exception ', ['Error Message' => $exceptionDetails, 'Current Action' => Route::getCurrentRoute()->getActionName()]);
+        }
+
+        return $model;
+    }
+
+
 }
