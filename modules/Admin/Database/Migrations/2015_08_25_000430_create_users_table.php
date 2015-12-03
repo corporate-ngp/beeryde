@@ -14,11 +14,11 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->string('name', 120);
-            $table->string('email', 100)->unique()->index();
-            $table->string('password', 100);
+            $table->string('name', 120)->nullable();
+            $table->string('email', 100)->nullable()->unique()->index();
+            $table->string('password', 100)->nullable();
             $table->boolean('status')->default(true)->unsigned()->index()->comment = "1 : Active, 0 : Inactive";
-            $table->string('contact', 20)->comment = "Contact number either phone or mobile";
+            $table->string('contact', 20)->nullable()->comment = "Contact number either phone or mobile";
             $table->boolean('gender')->nullable()->comment = "1 : Male, 0 : Female";
             $table->date('dob')->nullable()->comment = "Date Of Birth";
             $table->string('avatar', 255)->nullable()->comment = "User profile picture";

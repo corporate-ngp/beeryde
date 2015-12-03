@@ -39,7 +39,7 @@ class CarBrand extends BaseModel
      * @var array
      */
     protected static $updateRules = array(
-        'brand_name' => 'unique:car_brands'
+        'brand_name' => 'required|exists:car_brands'
     );
     
     /**

@@ -5,4 +5,4 @@ INSERT INTO `link_categories` (`id`, `category`, `category_icon`, `header_text`,
 (4, 'Webmaster Links', 'icon-list', 'Webmaster Links', 14, 1, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (5, 'Page Management', 'icon-docs', 'Page Management', 2, 1, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (6, 'FAQs', 'icon-question', 'FAQs', 9, 1, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(7, 'Site User Mgmt', 'icon-user', 'This is for website usermanagement', 20, 1, 1, 0, '2015-10-07 22:15:53', '2015-10-07 22:15:53');
+(7, 'Website APIs Pages', 'icon-user', 'Website APIs Pages Management', 20, 1, 1, 0, '2015-10-07 22:15:53', '2015-10-07 22:15:53');

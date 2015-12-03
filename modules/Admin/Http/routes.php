@@ -102,7 +102,25 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
     Route::get('site-user/trashed-data', ['as' => 'admin.site-user.apitrashedlist.index', 'uses' => 'SiteUserController@getTrashedData']);
     Route::post('site-user/group-action', ['as' => 'admin.site-user.groupaction', 'uses' => 'SiteUserController@groupAction']);
     Route::resource('site-user', 'SiteUserController');
+    
+//manage car brands
+    Route::get('car-brands/data', ['as' => 'admin.car-brands.list', 'uses' => 'CarBrandController@getData']);
+    Route::resource('car-brands', 'CarBrandController');
 
+//manage car models
+    Route::get('car-models/data', ['as' => 'admin.car-models.list', 'uses' => 'CarModelController@getData']);
+    Route::resource('car-models', 'CarModelController');
+
+//manage cars
+    Route::get('cars/carModelData/{cid}', ['as' => 'admin.cars.carModelList', 'uses' => 'CarController@getCarModelData']);
+    Route::get('cars/data', ['as' => 'admin.cars.list', 'uses' => 'CarController@getData']);
+    Route::resource('cars', 'CarController');
+    
+//manage cars
+    Route::get('rides/data', ['as' => 'admin.rides.list', 'uses' => 'RideController@getData']);
+    Route::resource('rides', 'RideController');
+    
+    
     ################ PLEASE WRITE YOUR ROUTES ABOVE THIS CODE ##################################
     Route::controllers([
         'auth' => 'Auth\AuthController',

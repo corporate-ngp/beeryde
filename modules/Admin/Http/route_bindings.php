@@ -15,6 +15,11 @@ Route::model('countries', 'Modules\Admin\Models\Country');
 Route::model('states', 'Modules\Admin\Models\State');
 Route::model('cities', 'Modules\Admin\Models\City');
 Route::model('site_user', 'Modules\Admin\Models\SiteUser');
+Route::model('car_brands', 'Modules\Admin\Models\CarBrand');
+Route::model('car_models', 'Modules\Admin\Models\CarModel');
+Route::model('cars', 'Modules\Admin\Models\Car');
+Route::model('rides', 'Modules\Admin\Models\Ride');
+
 
 Route::bind('usertype_links', function($type) {
     $userTypeRepository = new Modules\Admin\Repositories\UserTypeRepository(new Modules\Admin\Models\UserType);

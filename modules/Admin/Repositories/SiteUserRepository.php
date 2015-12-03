@@ -199,7 +199,7 @@ class SiteUserRepository extends BaseRepository
             }
         } else {
             foreach ($inputs as $key => $value) {
-                if (isset($user->$key) && $value != "") {
+                if (isset($user->$key)) {
                     $user->$key = $value;
                 }
             }
@@ -440,9 +440,19 @@ class SiteUserRepository extends BaseRepository
         $accountType = (isset($inputs['account_type'])) ? $inputs['account_type'] : 0;
         switch ($accountType) {
             case 1:
-                return $this->model->where('facebook_id', $inputs['facebook_id'])->first();
+                $user = $this->model->where('facebook_id', $inputs['facebook_id'])->first();
+                if (empty($user)) {
+                    $res = $this->createUser($inputs);
+                    $user = $this->model->where('facebook_id', $inputs['facebook_id'])->first();
+                }
+                return $user;
             case 2:
-                return $this->model->where('googleplus_id', $inputs['googleplus_id'])->first();
+                $user = $this->model->where('googleplus_id', $inputs['googleplus_id'])->first();
+                if (empty($user)) {
+                    $res = $this->createUser($inputs);
+                    $user = $this->model->where('googleplus_id', $inputs['googleplus_id'])->first();
+                }
+                return $user;
             default:
                 $user = $this->model->where('email', $inputs['email'])->first();
                 if (!empty($user->password) && \Hash::check($inputs['password'], $user->password)) {

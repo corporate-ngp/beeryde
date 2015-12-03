@@ -96,7 +96,7 @@
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label class="col-md-5 control-label">{!! trans('admin::controller/user.contact') !!} <span class="required" aria-required="true">*</span></label>
+                <label class="col-md-5 control-label">Contact Number <span class="required" aria-required="true">*</span></label>
                 <div class="col-md-7">
                     {!! Form::text('contact', null, ['id' => 'user_phone', 'class' => 'form-control', 'data-rule-required' => 'true', 'data-msg-required' => trans('admin::messages.required-enter', ['name' => trans('admin::controller/user.contact')]), 'minlength' => '10', 'maxlength' => '20']) !!}
                 </div>
@@ -161,6 +161,190 @@
                             {!! Form::radio('gender', 0, null, ['class' => 'form-control']) !!} {!! trans('admin::controller/user.female') !!}
                         </label>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label col-md-4">Date Of Birth</label>
+                <div class="col-md-8">
+                    {!! Form::text('dob', null, ['id' => 'dob', 'class' => 'form-control']) !!}
+                    <span class="help-block">format: yyyy-mm-dd  e.g. 2015-03-21</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-5 control-label">Star Ratings</label>
+                <div class="col-md-7">
+                    {!! Form::text('ratings', null, ['id' => 'ratings', 'class' => 'form-control']) !!}
+                    <span class="help-block">star rating e.g. 5,5,5,5</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label col-md-4">SMS Notification</label>
+                <div class="col-md-8">
+                    {!! Form::checkbox('sms_notification', 1, null, ['id' => 'sms_notification', 'class' => 'form-control']) !!}
+                    <span class="help-block">SMS Notification yes/no</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-5 control-label">Push Notification</label>
+                <div class="col-md-7">
+                    {!! Form::checkbox('push_notification', 1, null, ['id' => 'push_notification', 'class' => 'form-control']) !!}
+                    <span class="help-block">Push Notification yes/no</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label col-md-4">Occupation</label>
+                <div class="col-md-8">
+                    {!! Form::text('occupation', null, ['id' => 'occupation', 'class' => 'form-control']) !!}
+                    <span class="help-block"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-5 control-label">Profession Details</label>
+                <div class="col-md-7">
+                    {!! Form::text('profession_details', null, ['id' => 'profession_details', 'class' => 'form-control']) !!}
+                    <span class="help-block"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label col-md-4">Emergency Contact Number</label>
+                <div class="col-md-8">
+                    {!! Form::text('emergency_contact_1', null, ['id' => 'emergency_contact_1', 'class' => 'form-control', 'minlength' => '10', 'maxlength' => '20']) !!}
+                    <span class="help-block"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-5 control-label">Alternate Emergency Number</label>
+                <div class="col-md-7">
+                    {!! Form::text('emergency_contact_2', null, ['id' => 'emergency_contact_2', 'class' => 'form-control', 'minlength' => '10', 'maxlength' => '20']) !!}
+                    <span class="help-block"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label col-md-4">ID Proof Type</label>
+                <div class="col-md-8">
+                    {!! Form::text('id_proof_type', null, ['id' => 'id_proof_type', 'class' => 'form-control']) !!}
+                    <span class="help-block">e.g. PAN card, Adhar card, Passport</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-5 control-label">ID Proof</label>
+                <div class="col-md-7">
+                    {!! Form::text('id_proof', null, ['id' => 'id_proof', 'class' => 'form-control']) !!}
+                    <span class="help-block">Id Proof File</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label col-md-4">Music</label>
+                <div class="col-md-8">
+                    {!! Form::checkbox('music', 1, null, ['id' => 'music', 'class' => 'form-control']) !!}
+                    <span class="help-block">Music yes/no</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-5 control-label">Smoking</label>
+                <div class="col-md-7">
+                    {!! Form::checkbox('smoking', 1, null, ['id' => 'smoking', 'class' => 'form-control']) !!}
+                    <span class="help-block">Smoking yes/no</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label col-md-4">Corporate Email Address</label>
+                <div class="col-md-8">
+                    {!! Form::text('corporate_email', null, ['id' => 'corporate_email', 'class' => 'form-control', 'data-rule-email' => 'true', 'data-msg-required' => 'Please enter valid email address', 'maxlength' => '100']) !!}
+                    <span class="help-block"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-4 control-label">Mobile Verification</label>
+                <div class="col-md-8">
+                    {!! Form::text('mobile_verification', null, ['id' => 'mobile_verification', 'class' => 'form-control']) !!}
+                    <span class="help-block">First send SMS code upto 10 digit max and enter SMS code and after that put 1 for verification success</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label col-md-5">Email Verification</label>
+                <div class="col-md-7">
+                    {!! Form::text('email_verification', null, ['id' => 'email_verification', 'class' => 'form-control']) !!}
+                    <span class="help-block">First send email and verification code upto 10 digit max and after that put 1 for verification success</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label col-md-4">Facebook ID</label>
+                <div class="col-md-8">
+                    {!! Form::text('facebook_id', null, ['id' => 'facebook_id', 'class' => 'form-control']) !!}
+                    <span class="help-block">Facebook API returns facebook id for each registered user</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-5 control-label">Googleplus ID</label>
+                <div class="col-md-7">
+                    {!! Form::text('googleplus_id', null, ['id' => 'googleplus_id', 'class' => 'form-control']) !!}
+                    <span class="help-block">Google Plus API returns googleplus id for each registered user</span>
                 </div>
             </div>
         </div>

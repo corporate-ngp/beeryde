@@ -17,4 +17,9 @@ INSERT INTO `links` (`id`, `link_name`, `link_icon`, `link_url`, `link_category_
 (16, 'File Manager', 'icon-basket', 'admin.medias.index', 5, 18, 'File Manager', 'File Manager', 10, 1, 1, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (17, 'Manage FAQ Category', 'icon-basket', 'admin.faq-categories.index', 6, 19, 'Manage FAQ Categories', 'Manage FAQ Categories', 10, 1, 1, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (18, 'Page Management', 'icon-docs', 'admin.manage-pages.index', 5, 20, 'Manage Pages', 'Manage Pages', 10, 1, 1, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(19, 'Manage Website Users', 'icon-user', 'admin.site-user.index', 7, 1, 'Manage Website Users', '', 10, 1, 1, 1, '2015-10-07 22:34:07', '2015-10-11 08:53:02');
+(19, 'Manage Website Users', 'icon-user', 'admin.site-user.index', 7, 1, 'Manage Website Users', '', 10, 1, 1, 1, '2015-10-07 22:34:07', '2015-10-11 08:53:02'),
+(20, 'Manage Car Brands', 'icon-globe-alt', 'admin.car-brands.index', 7, 2, 'Manage Car Brands', 'Manage Car Brands', 10, 1, 1, 0, '2015-12-01 23:04:54', '2015-12-01 23:04:54'),
+(21, 'Manage Car Models', 'icon-badge', 'admin.car-models.index', 7, 3, 'Manage Car Models', 'Manage Car Models', 10, 1, 1, 0, '2015-12-01 23:06:46', '2015-12-01 23:06:46'),
+(22, 'Manage Cars', 'icon-mouse', 'admin.cars.index', 7, 4, 'Manage Cars', 'Manage Cars', 10, 1, 1, 0, '2015-12-01 23:09:41', '2015-12-01 23:09:41'),
+(23, 'Manage Rides', 'icon-paper-plane', 'admin.rides.index', 7, 5, 'Manage Rides', 'Manage Rides', 10, 1, 1, 0, '2015-12-01 23:12:24', '2015-12-01 23:12:24');
+

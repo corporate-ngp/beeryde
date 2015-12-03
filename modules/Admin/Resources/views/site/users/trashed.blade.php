@@ -20,8 +20,8 @@
 @section('content')
 
 {{--*/ $menus = [
-    ['label' => trans('admin::controller/user.user-management'), 'link' => 'admin/user'],
-    ['label' => trans('admin::controller/user.manage-users-trashed'), 'link' => 'admin/user/trashed']
+    ['label' => trans('admin::controller/user.user-management'), 'link' => 'admin/site-user'],
+    ['label' => trans('admin::controller/user.manage-users-trashed'), 'link' => 'admin/site-user/trashed']
 ];
 /*--}}
 @include('admin::partials.breadcrumb', ['title' => trans('admin::controller/user.manage-users-trashed'), 'menus' => $menus ])
@@ -36,7 +36,7 @@
                     <span class="caption-subject font-green-sharp bold uppercase">{!! trans('admin::controller/user.view-trashed-users') !!}</span>
                 </div>
                 <div class="actions">
-                    <a href="{{ URL::to('/admin/user')}}" class="btn green">{!! trans('admin::controller/user.show-active-users') !!}</a>
+                    <a href="{{ URL::to('/admin/site-user')}}" class="btn green">{!! trans('admin::controller/user.show-active-users') !!}</a>
                 </div>
             </div>
             <div class="portlet-body">

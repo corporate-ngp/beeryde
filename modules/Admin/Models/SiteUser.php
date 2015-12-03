@@ -63,10 +63,10 @@ class SiteUser extends BaseModel implements AuthenticatableContract, CanResetPas
      * @var array
      */
     protected static $updateRules = array(
-        'email' => 'unique:users',
-        'contact' => 'unique:users',
-        'facebook_id' => 'unique:users',
-        'googleplus_id' => 'unique:users'
+        'email' => 'exists:users',
+        'contact' => 'exists:users',
+        'facebook_id' => 'exists:users',
+        'googleplus_id' => 'exists:users'
     );
     
     /**
