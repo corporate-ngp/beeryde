@@ -61,11 +61,28 @@ class CarBrandRepository extends BaseRepository
         //Cache::tags($this->model->table())->flush();
         $cacheKey = str_replace(['\\'], [''], __METHOD__) . ':' . md5(json_encode($params));
         $response = Cache::tags($this->model->table())->remember($cacheKey, $this->ttlCache, function() {
-            return $this->model->select('*')->where('status',1)->get();
+            return $this->model->select('*')->get();
         });
 
         return $response;
     }
+    
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function listCarBrandData()
+    {
+        $cacheKey = str_replace(['\\'], [''], __METHOD__);
+        //Cache::tags not suppport with files and Database
+        $response = Cache::tags($this->model->table())->remember($cacheKey, $this->ttlCache, function() {
+            return $this->model->orderBY('id')->lists('brand_name', 'id');
+        });
+
+        return $response;
+    }
+    
 
     /**
      * Save the Model data.

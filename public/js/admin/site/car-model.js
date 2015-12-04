@@ -1,4 +1,4 @@
-siteObjJs.admin.ipStateJs = function () {
+siteObjJs.admin.ipCarModelJs = function () {
 
     var token = $('meta[name="csrf-token"]').attr('content');
     var grid;
@@ -24,7 +24,7 @@ siteObjJs.admin.ipStateJs = function () {
     var fetchDataForEdit = function () {
         $('.portlet-body').on('click', '.edit-form-link', function () {
             var state_id = $(this).attr("id");
-            var actionUrl = 'states/' + state_id + '/edit';
+            var actionUrl = 'car-models/' + state_id + '/edit';
             $.ajax({
                 url: actionUrl,
                 cache: false,
@@ -85,7 +85,7 @@ siteObjJs.admin.ipStateJs = function () {
 
                         //Empty the form fields
                         formElement.find("input[type=text], textarea").val("");
-                        $("#country_id").select2('val', '');
+                        $("#car_brand_id").select2('val', '');
 
                         //trigger cancel button click event to collapse form and show title of add page
                         $('.btn-collapse').trigger('click');
@@ -136,9 +136,8 @@ siteObjJs.admin.ipStateJs = function () {
                 "pageLength": siteObjJs.admin.commonJs.constants.recordsPerPage,
                 "columns": [
                     {data: 'id', name: 'id'},
-                    {data: 'country_id', name: 'country_id'},
-                    {data: 'name', name: 'name'},
-                    {data: 'state_code', name: 'name'},
+                    {data: 'car_brand_id', name: 'car_brand_id'},
+                    {data: 'model_name', name: 'model_name'},
                     {data: 'status', name: 'status'},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
                 ],
@@ -155,7 +154,7 @@ siteObjJs.admin.ipStateJs = function () {
                     });
                 },
                 "ajax": {
-                    "url": "states/data",
+                    "url": "car-models/data",
                     "type": "GET"
                 },
                 "order": [

@@ -38,7 +38,7 @@ class CarModelController extends Controller
     //default method (verb/action - GET)
     public function index()
     {
-        $data['page_title'] = 'Manage CarModel';
+        $data['page_title'] = 'Manage Car Models';
         $carBrandList = $this->carBrandRepository->listCarBrandData()->toArray();
         return view('admin::site.car-models.index', compact('data', 'carBrandList'));
     }
@@ -54,7 +54,7 @@ class CarModelController extends Controller
         //dd($data->toArray());
         return Datatables::of($data)
                 ->addColumn('car_brand_id', function ($result) {
-                    return (!empty($result->CarBrand->name)) ? $result->CarBrand->name : '';
+                    return (!empty($result->CarBrand->brand_name)) ? $result->CarBrand->brand_name : '';
                 })
                 ->addColumn('status', function ($result) {
                     switch ($result->status) {
@@ -88,18 +88,13 @@ class CarModelController extends Controller
                             return Str::contains($row['car_brand_id'], $request->get('car_brand_id')) ? true : false;
                         });
                     }
-                    if ($request->has('name')) {
+                    if ($request->has('model_name')) {
 
                         $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                            return Str::contains($row['name'], $request->get('name')) ? true : false;
+                            return Str::contains($row['model_name'], $request->get('model_name')) ? true : false;
                         });
                     }
-                    if ($request->has('state_code')) {
 
-                        $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                            return Str::contains($row['state_code'], strtoupper($request->get('state_code'))) ? true : false;
-                        });
-                    }
                     if ($request->has('status')) {
                         $instance->collection = $instance->collection->filter(function ($row) use ($request) {
                             return Str::equals($row['status'], $request->get('status')) ? true : false;
@@ -136,7 +131,7 @@ class CarModelController extends Controller
      */
     public function store(CarModelCreateRequest $request)
     {
-        $response = $this->repository->create($request->all());
+        $response = $this->repository->store($request->all());
 
         return response()->json($response);
     }
@@ -147,19 +142,19 @@ class CarModelController extends Controller
      * @param  Modules\Admin\Models\CarModel $state
      * @return json encoded Response
      */
-    public function edit(CarModel $state)
+    public function edit(CarModel $model)
     {
         //dd($state);
         $carBrandList = $this->carBrandRepository->listCarBrandData()->toArray();
         $response['success'] = true;
-        $response['form'] = view('admin::site.car-models.edit', compact('state', 'carBrandList'))->render();
+        $response['form'] = view('admin::site.car-models.edit', compact('model', 'carBrandList'))->render();
 
         return response()->json($response);
     }
 
-    public function update(CarModelUpdateRequest $request, CarModel $state)
+    public function update(CarModelUpdateRequest $request, CarModel $model)
     {
-        $response = $this->repository->update($request->all(), $state);
+        $response = $this->repository->updateMe($request->all(), $model);
 
         return response()->json($response);
     }

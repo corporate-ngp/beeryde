@@ -1,24 +1,17 @@
 <div class="form-body">
     <div class="form-group">
-        <label class="col-md-3 control-label">Select Country<span class="required" aria-required="true">*</span></label>
+        <label class="col-md-3 control-label">Select Car Brand<span class="required" aria-required="true">*</span></label>
         <div class="col-md-4">
-            {!! Form::select('country_id', [''=>'Select Country'] + $countryList, null,['class'=>'select2me form-control', 'id' => 'country_id', 'data-rule-required'=>'true', 'data-msg-required'=>'Please select Country.']) !!}
-            <span class="help-block">Select name of the country.</span>
+            {!! Form::select('car_brand_id', [''=>'Select Car Brand'] + $carBrandList, null,['class'=>'select2me form-control', 'id' => 'car_brand_id', 'data-rule-required'=>'true', 'data-msg-required'=>'Please select Car Brand.']) !!}
+            <span class="help-block">Select car brand.</span>
         </div>
     </div>
     <div class="form-group">
-        <label class="col-md-3 control-label">State Name <span class="required" aria-required="true">*</span></label>
+        <label class="col-md-3 control-label">Car Model Name <span class="required" aria-required="true">*</span></label>
         <div class="col-md-4">
-            {!! Form::text('name', null, ['class'=>'form-control', 'maxlength' => 200, 'id'=>'state_name', 'data-rule-required'=>'true', 'data-msg-required'=>'Please enter State Name.']) !!}
+            {!! Form::text('model_name', null, ['class'=>'form-control', 'maxlength' => 200, 'id'=>'model_name', 'data-rule-required'=>'true', 'data-msg-required'=>'Please enter Car Model Name.']) !!}
         </div>
     </div>
-    <div class="form-group">
-        <label class="col-md-3 control-label">State Code <span class="required" aria-required="true">*</span></label>
-        <div class="col-md-4">
-            {!! Form::text('state_code', null, ['class'=>'form-control upper input-inline input-small', 'maxlength' => 3, 'id'=>'state_code', 'data-rule-required'=>'true', 'data-msg-required'=>'Please enter State Code.']) !!}
-        </div>
-    </div>
-
     <div class="form-group">
         <label class="col-md-3 control-label">Status </label>
         <div class="col-md-4">

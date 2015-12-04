@@ -2,7 +2,7 @@
 
 @section('template-level-scripts')
 @parent
-{!! HTML::script( URL::asset('js/admin/state.js') ) !!}
+{!! HTML::script( URL::asset('js/admin/site/car-model.js') ) !!}
 @stop
 
 @section('styles')
@@ -15,7 +15,7 @@
 @parent
 <script>
     jQuery(document).ready(function () {
-        siteObjJs.admin.ipStateJs.init();
+        siteObjJs.admin.ipCarModelJs.init();
         siteObjJs.admin.commonJs.boxExpandBtnClick();
     });
 </script>
@@ -29,7 +29,7 @@
 </div>
 
 @if(!empty(Auth::user()->hasAdd))
-@include('admin::state.create')
+@include('admin::site.car-models.create')
 @endif
 
 <div id="edit_form">
@@ -39,11 +39,11 @@
     <div class="portlet-title">
         <div class="caption">
             <i class="fa fa-list font-blue-sharp"></i>
-            <span class="caption-subject font-blue-sharp bold uppercase">View States</span>
+            <span class="caption-subject font-blue-sharp bold uppercase">View Car Models</span>
         </div>
         <div class="actions">
             @if(!empty(Auth::user()->hasAdd))
-            <a href="javascript:;" class="btn blue btn-add-big btn-expand-form"><i class="fa fa-plus"></i><span class="hidden-480">Add New State </span></a>
+            <a href="javascript:;" class="btn blue btn-add-big btn-expand-form"><i class="fa fa-plus"></i><span class="hidden-480">Add New Car Model </span></a>
             @endif
         </div>
     </div>
@@ -53,13 +53,12 @@
                 <thead>
                     <tr role="row" class="heading">
                         <th width='5%'>#</th>
-                        <th>Country Name</th>
-                        <th>State Name</th>
-                        <th width='10%'>State Code</th>
+                        <th>Car Brand Name</th>
+                        <th>Car Model Name</th>
                         <th width='20%'>Status</th>
                         <th width='10%'>Options</th>
                     </tr>
-                    @include('admin::state.search')
+                    @include('admin::site.car-models.search')
                 </thead>
                 <tbody>
 

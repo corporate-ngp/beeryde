@@ -5,7 +5,7 @@
  * 
  * @author NGP <corporate.ngp@gmail.com>
 
- 
+
  */
 namespace Modules\Admin\Http\Requests;
 
@@ -25,17 +25,8 @@ class CarModelUpdateRequest extends Request
         $this->sanitize();
 
         return [
-            'name' => 'required|unique:states,name,' . $this->states->id,
-            'country_id' => 'required',
-            'state_code' => 'required|unique:states,state_code,' . $this->states->id
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'name.unique' => 'State Name already taken.',
-            'state_code.unique' => 'State Code already taken.'
+            'car_brand_id' => 'required',
+            'model_name' => 'required|unique:states,name,' . $this->car_models->id,
         ];
     }
 
@@ -46,12 +37,8 @@ class CarModelUpdateRequest extends Request
     {
         $input = $this->all();
 
-        $input['country_id'] = filter_var($input['country_id'], FILTER_SANITIZE_NUMBER_INT);
-        $input['name'] = filter_var($input['name'], FILTER_SANITIZE_STRING);
-        $input['state_code'] = filter_var($input['state_code'], FILTER_SANITIZE_STRING);
-        if (Auth::check()) {
-            $input['updated_by'] = filter_var(Auth::user()->id, FILTER_SANITIZE_NUMBER_INT);
-        }
+        $input['car_brand_id'] = filter_var($input['car_brand_id'], FILTER_SANITIZE_NUMBER_INT);
+        $input['model_name'] = filter_var($input['model_name'], FILTER_SANITIZE_STRING);
         $this->merge($input);
     }
 
@@ -67,7 +54,7 @@ class CarModelUpdateRequest extends Request
         $is_edit = Auth::user()->can($action['as'], 'edit');
         $own_edit = Auth::user()->can($action['as'], 'own_edit');
 
-        if ($is_edit == 1 || (!empty($own_edit) && ($this->states->created_by == Auth::user()->id))) {
+        if ($is_edit == 1 || !empty($own_edit) ) {
             return true;
         } else {
             abort(403);

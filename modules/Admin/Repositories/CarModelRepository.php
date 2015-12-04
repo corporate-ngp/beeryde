@@ -62,7 +62,7 @@ class CarModelRepository extends BaseRepository
         //Cache::tags($this->model->table(), CarBrand::table())->flush();
         $cacheKey = str_replace(['\\'], [''], __METHOD__) . ':' . md5(json_encode($params));
         $response = Cache::tags($this->model->table(), CarBrand::table())->remember($cacheKey, $this->ttlCache, function() {
-            return MyModel::with('CarBrand')->where('status',1)->orderBy('car_brand_id')->get();
+            return MyModel::with('CarBrand')->orderBy('id')->get();
         });
 
         return $response;
@@ -147,6 +147,83 @@ class CarModelRepository extends BaseRepository
 
         return $model;
     }
+    
+         /**
+     * Store a newly created resource in storage.
+     *
+     * @param  Form data posted from ajax $inputs
+     * @return $result array with status and message elements
+     */
+    public function store($inputs)
+    {
+        try {
+            $model = new $this->model;
+            $allColumns = $model->getTableColumns($model->getTable());
+            foreach ($inputs as $key => $value) {
+                if (in_array($key, $allColumns)) {
+                    $model->$key = $value;
+                }
+            }
+
+            $save = $model->save();
+
+            if ($save) {
+                $response['status'] = 'success';
+                $response['message'] = trans('admin::messages.added', ['name' => 'Car Model']);
+            } else {
+                $response['status'] = 'error';
+                $response['message'] = trans('admin::messages.not-added', ['name' => 'Car Model']);
+            }
+
+            return $response;
+        } catch (Exception $e) {
+            $exceptionDetails = $e->getMessage();
+            $response['status'] = 'error';
+            $response['message'] = trans('admin::messages.not-added', ['name' => 'Car Model']) . "<br /><b> Error Details</b> - " . $exceptionDetails;
+            Log::error(trans('admin::messages.not-added', ['name' => 'Car Model']), ['Error Message' => $exceptionDetails, 'Current Action' => Route::getCurrentRoute()->getActionName()]);
+
+            return $response;
+        }
+    }
+
+    /**
+     * Update a country.
+     *
+     * @param  Form data posted from ajax $inputs, Modules\Admin\Models\Country $model
+     * @return $result array with status and message elements
+     */
+    public function updateMe($inputs, $model)
+    {
+        try {
+
+            foreach ($inputs as $key => $value) {
+                if (isset($model->$key)) {
+                    $model->$key = $value;
+                }
+            }
+
+            $save = $model->save();
+
+            if ($save) {
+                $response['status'] = 'success';
+                $response['message'] = trans('admin::messages.updated', ['name' => 'Car Model']);
+            } else {
+                $response['status'] = 'error';
+                $response['message'] = trans('admin::messages.not-updated', ['name' => 'Car Model']);
+            }
+
+            return $response;
+        } catch (Exception $e) {
+
+            $exceptionDetails = $e->getMessage();
+            $response['status'] = 'error';
+            $response['message'] = trans('admin::messages.not-updated', ['name' => 'Car Model']) . "<br /><b> Error Details</b> - " . $exceptionDetails;
+            Log::error(trans('admin::messages.not-updated', ['name' => 'Car Model']), ['Error Message' => $exceptionDetails, 'Current Action' => Route::getCurrentRoute()->getActionName()]);
+
+            return $response;
+        }
+    }
+    
 
 
 }

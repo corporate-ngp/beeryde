@@ -25,17 +25,8 @@ class CarModelCreateRequest extends Request
         $this->sanitize();
 
         return [
-            'name' => 'required|unique:states',
-            'country_id' => 'required',
-            'state_code' => 'required|unique:states'
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'name.unique' => 'State Name already taken.',
-            'state_code.unique' => 'State Code already taken.'
+            'model_name' => 'required|unique:car_models',
+            'car_brand_id' => 'required'
         ];
     }
 
@@ -46,12 +37,8 @@ class CarModelCreateRequest extends Request
     {
         $input = $this->all();
 
-        $input['country_id'] = filter_var($input['country_id'], FILTER_SANITIZE_NUMBER_INT);
-        $input['name'] = filter_var($input['name'], FILTER_SANITIZE_STRING);
-        $input['state_code'] = filter_var($input['state_code'], FILTER_SANITIZE_STRING);
-        if (Auth::check()) {
-            $input['created_by'] = filter_var(Auth::user()->id, FILTER_SANITIZE_NUMBER_INT);
-        }
+        $input['car_brand_id'] = filter_var($input['car_brand_id'], FILTER_SANITIZE_NUMBER_INT);
+        $input['model_name'] = filter_var($input['model_name'], FILTER_SANITIZE_STRING);
         $this->merge($input);
     }
 

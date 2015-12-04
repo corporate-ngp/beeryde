@@ -33,7 +33,6 @@ class StateRepository
      */
     public function data($params = [])
     {
-        return State::select('*')->with('Country')->orderBy('id')->get();
         $cacheKey = str_replace(['\\'], [''], __METHOD__) . ':' . md5(json_encode($params));
         $response = Cache::tags(State::table())->remember($cacheKey, $this->ttlCache, function() {
             return State::select('*')->with('Country')->orderBy('id')->get();

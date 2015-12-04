@@ -2,13 +2,10 @@
     <td>
     </td>
     <td>
-        {!!  Form::select('country_id', ['' => 'Select Country'] +$countryList, null, ['required', 'class'=>'select2me form-control form-filter input-sm select2-offscreen'])!!}
+        {!!  Form::select('car_brand_id', ['' => 'Select Car Brand'] +$carBrandList, null, ['required', 'class'=>'select2me form-control form-filter input-sm select2-offscreen'])!!}
     </td>
     <td>
-        {!! Form::text('name', null, ['class'=>'form-control form-filter']) !!}
-    </td>
-    <td>
-        {!! Form::text('state_code', null, ['class'=>'form-control form-filter upper', 'maxlength' => 3]) !!}
+        {!! Form::text('model_name', null, ['class'=>'form-control form-filter']) !!}
     </td>
     <td>
         {!!  Form::select('status', ['' => 'Select',0 => 'Inactive', 1 =>'Active'], null, ['required', 'class'=>'select2me form-control form-filter input-sm select2-offscreen'])!!}
