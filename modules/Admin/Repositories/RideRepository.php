@@ -16,6 +16,7 @@ use Exception;
 use Route;
 use Log;
 use Cache;
+use DB;
 
 class RideRepository extends BaseRepository
 {
@@ -60,10 +61,29 @@ class RideRepository extends BaseRepository
      */
     public function data($params = [])
     {
-        //Cache::tags($this->model->table(), CarBrand::table())->flush();
+        //Cache::tags($this->model->table(), Car::table(), User::table())->flush();
         $cacheKey = str_replace(['\\'], [''], __METHOD__) . ':' . md5(json_encode($params));
-        $response = Cache::tags($this->model->table(), Car::table(), User::table())->remember($cacheKey, $this->ttlCache, function() {
-            return MyModel::with('User', 'Car')->where('status',1)->orderBy('user_id', 'car_id')->get();
+        $response = Cache::tags($this->model->table(), Car::table(), User::table())->remember($cacheKey, $this->ttlCache, function() use ($params) {
+            //return MyModel::with('User', 'Car')->where('status', 1)->orderBy('user_id', 'car_id')->get();
+            $query = MyModel::with('User', 'Car');
+
+            $model = new $this->model;
+            $allColumns = $model->getTableColumns($model->getTable());
+            foreach ($params as $key => $value) {
+
+                if (in_array($key, $allColumns)) {
+                    if (in_array($key, ['ride_from', 'ride_to'])) {
+                        $query->where(DB::raw($key), 'LIKE', "%" . $value . "%");
+                    } else {
+                        $query->where($key, '=', $value);
+                    }
+                }
+            }
+
+            $query->orderBy('user_id', 'car_id');
+            //dd($query->getQuery()->toSql());
+            return $query->get();
+            
         });
 
         return $response;
@@ -88,12 +108,12 @@ class RideRepository extends BaseRepository
 
             $carUser = User::find($inputs['user_id']);
             $model->user()->associate($carUser);
-            
+
             $carModel = Car::find($inputs['car_id']);
             $model->car()->associate($carModel);
-            
+
             $model->save();
-            
+
             $response = ApiResponse::json($model);
         } catch (Exception $e) {
             $exceptionDetails = $e->getMessage();
@@ -120,10 +140,10 @@ class RideRepository extends BaseRepository
             }
             $carUser = User::find($inputs['user_id']);
             $model->user()->associate($carUser);
-            
+
             $carModel = Car::find($inputs['car_id']);
             $model->car()->associate($carModel);
-            
+
             $model->save();
 
             $response = ApiResponse::json($model);
@@ -135,8 +155,8 @@ class RideRepository extends BaseRepository
 
         return $response;
     }
-    
-        /**
+
+    /**
      * Store a 
      * 
      * @param  array $inputs
@@ -147,13 +167,12 @@ class RideRepository extends BaseRepository
         $model = [];
         try {
             $model = $this->getById($id);
-            
+
             $carUser = User::find($model->user_id);
             $model->user()->associate($carUser);
-            
+
             $carModel = Car::find($model->car_model_id);
             $model->car()->associate($carModel);
-            
         } catch (Exception $e) {
             $exceptionDetails = $e->getMessage();
             Log::error('Exception ', ['Error Message' => $exceptionDetails, 'Current Action' => Route::getCurrentRoute()->getActionName()]);
@@ -161,6 +180,4 @@ class RideRepository extends BaseRepository
 
         return $model;
     }
-
-
 }

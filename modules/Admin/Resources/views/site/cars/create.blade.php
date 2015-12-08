@@ -1,14 +1,14 @@
 <div class="portlet box blue add-form-main">
     <div class="portlet-title togglelable">
         <div class="caption">
-            <i class="fa fa-plus"></i>Add New City 
+            <i class="fa fa-plus"></i>Add New Car 
         </div>
         <div class="tools">
             <a href="javascript:;" class="expand box-expand-form"></a>
         </div>
     </div>
     <div class="portlet-body form display-hide">
-        {!! Form::open(['route' => ['admin.cities.store'], 'method' => 'post', 'class' => 'form-horizontal city-form',  'id' => 'create-city', 'msg' => 'City added successfully.']) !!}
+        {!! Form::open(['route' => ['admin.cars.store'], 'method' => 'post', 'class' => 'form-horizontal city-form',  'id' => 'create-city', 'msg' => 'Car added successfully.']) !!}
         @include('admin::city.form')
         <div class="form-actions">
             <div class="col-md-6">

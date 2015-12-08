@@ -41,7 +41,12 @@ class RideController extends Controller
     public function index()
     {
         try {
-            $myObj = $this->repository->data();
+            $inputs = Input::all();
+            if (!isset($inputs['status'])) {
+                $inputs['status'] = 1;
+            }
+            $myObj = $this->repository->data($inputs);
+
             if (!empty($myObj)) {
                 return ApiResponse::json($myObj);
             } else {

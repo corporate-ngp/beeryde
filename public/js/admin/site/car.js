@@ -1,4 +1,4 @@
-siteObjJs.admin.cityJs = function () {
+siteObjJs.admin.carJs = function () {
 
     // Initialize all the page-specific event listeners here.
 
@@ -25,13 +25,13 @@ siteObjJs.admin.cityJs = function () {
             fetchStateList(this);
         });
 
-        $('#CityList').on('change', '#country-drop-down-search', function (e) {
+        $('#CarList').on('change', '#country-drop-down-search', function (e) {
             fetchStateList(this, 'search');
         });
 
-        $('#CityList').on('click', '.filter-cancel', function (e) {
+        $('#CarList').on('click', '.filter-cancel', function (e) {
             $("#country-drop-down-search").val('');
-            $("#CityList #state-drop-down-search #state_id").val('');
+            $("#CarList #state-drop-down-search #state_id").val('');
             $("#status-drop-down-search").val('');
         });
 
@@ -55,7 +55,7 @@ siteObjJs.admin.cityJs = function () {
             {
                 if (content === 'search') {
                     htm = $($.parseHTML(data.list)).filter('div#state-listing-content');
-                    $('#CityList').find("#state-drop-down-search").html(htm.html());
+                    $('#CarList').find("#state-drop-down-search").html(htm.html());
                 } else {
                     $(currentForm).find("#state-drop-down").html(data.list);
                 }
@@ -84,8 +84,8 @@ siteObjJs.admin.cityJs = function () {
 
     var fetchDataForEdit = function () {
         $('.portlet-body').on('click', '.edit-form-link', function () {
-            var city_id = $(this).attr("id");
-            var actionUrl = 'cities/' + city_id + '/edit';
+            var car_id = $(this).attr("id");
+            var actionUrl = 'cities/' + car_id + '/edit';
             $.ajax({
                 url: actionUrl,
                 cache: false,
@@ -185,7 +185,7 @@ siteObjJs.admin.cityJs = function () {
 
         grid = new Datatable();
         grid.init({
-            src: $('#CityList'),
+            src: $('#CarList'),
             loadingMessage: 'Loading...',
             dataTable: {
                 'language': {
