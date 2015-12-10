@@ -19,19 +19,19 @@
     <div class="form-group">
         <label class="col-md-3 control-label">Color</label>
         <div class="col-md-4">
-            {!! Form::select('color', [''=>'Select Color', 'Black' => 'Black', 'Blue' => 'Blue', 'Brown' => 'Brown', 'Grey' => 'Grey', 'Green' => 'Green', 'Purple' => 'Purple', 'Red' => 'Red', 'Silver' => 'Silver', 'White' => 'White', 'Yellow' => 'Yellow'], null,['class'=>'select2me form-control country_id', 'id' => 'color']) !!}
+            {!! Form::select('color', [''=>'Select Color', 'Black' => 'Black', 'Blue' => 'Blue', 'Brown' => 'Brown', 'Grey' => 'Grey', 'Green' => 'Green', 'Purple' => 'Purple', 'Red' => 'Red', 'Silver' => 'Silver', 'White' => 'White', 'Yellow' => 'Yellow'], null,['class'=>'select2me form-control', 'id' => 'color']) !!}
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-3 control-label">Comfort</label>
         <div class="col-md-4">
-            {!! Form::select('comfort', [''=>'Select Comfort', 'Luxury' => 'Luxury', 'Comfortable' => 'Comfortable', 'Economy' => 'Economy'], null,['class'=>'select2me form-control country_id', 'id' => 'comfort']) !!}
+            {!! Form::select('comfort', [''=>'Select Comfort', 'Luxury' => 'Luxury', 'Comfortable' => 'Comfortable', 'Economy' => 'Economy'], null,['class'=>'select2me form-control', 'id' => 'comfort']) !!}
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-3 control-label">Seats <span class="required" aria-required="true">*</span></label>
         <div class="col-md-4">
-            {!! Form::select('seats', [''=>'Select Seat', '1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10'], null,['class'=>'select2me form-control country_id', 'id' => 'seats', 'data-rule-required'=>'true', 'data-msg-required'=>'Please select Seats.']) !!}
+            {!! Form::select('seats', [''=>'Select Seat', '1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6', '7' => '7', '8' => '8', '9' => '9', '10' => '10'], null,['class'=>'select2me form-control', 'id' => 'seats', 'data-rule-required'=>'true', 'data-msg-required'=>'Please select Seats.']) !!}
             <span class="help-block">How many seats are allowed</span>
         </div>
     </div>
