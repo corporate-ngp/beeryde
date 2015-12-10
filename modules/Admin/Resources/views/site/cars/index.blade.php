@@ -24,15 +24,15 @@
     </div>
     <div class="portlet-body">
         <div class="table-container">
-<!--            <div class="table-actions-wrapper">
+            <div class="table-actions-wrapper">
                 <span>
                 </span>
 
-                <table class="">
+<!--                <table class="">
                     <tbody>
                         {{--
                     <td>
-                        {!! Form::select('search_country', [''=>'All'] + $countryList, '',['class'=>'form-control width-auto', 'id' => 'search_country', 'column-index' => '2']) !!}
+                        {!! Form::select('car_brand_id', [''=>'All'] + $carBrandList, '',['class'=>'form-control width-auto', 'id' => 'car_brand_id', 'column-index' => '2']) !!}
                     </td>
                         --}}
                     <td>&nbsp;&nbsp;&nbsp;</td>
@@ -41,17 +41,18 @@
                         <input id="data-search" type="search" class="form-control" placeholder="Search">
                     </td>
                     </tbody>
-                </table>
-            </div>-->
+                </table>-->
+            </div>
             <table class="table table-striped table-bordered table-hover" id="CarList">
                 <thead>
                     <tr role="row" class="heading">
                         <th>#</th>
-                        <th width='5%'>ID</th>
-                        <th width='20%'>Country</th>
-                        <th width='20%'>State</th>
-                        <th>Car Name</th>
-                        <th width='20%'>Status</th>
+                        <th width=''>ID</th>
+                        <th width=''>Car Brand</th>
+                        <th width=''>Car Model</th>
+                        <th width='10%'>Car User Id</th>
+                        <th width=''>Reg. No.</th>
+                        <th width='2%'>Status</th>
                         <th width='10%'>Options</th>
                     </tr>
                     @include('admin::site.cars.search')

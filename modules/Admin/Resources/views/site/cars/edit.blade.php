@@ -9,7 +9,7 @@
     </div>
     <div class="portlet-body form">
         {!! Form::model($model, ['route' => ['admin.cars.update', $model->id], 'method' => 'put', 'class' => 'form-horizontal panel config-setting-form','id'=>'edit-city', 'msg' => 'Car updated successfully.']) !!}
-        @include('admin::city.form')
+        @include('admin::site.cars.form')
         <div class="form-actions">
             <div class="col-md-6">
                 <div class="col-md-offset-6 col-md-9">

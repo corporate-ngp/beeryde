@@ -88,7 +88,7 @@ class CarModelRepository extends BaseRepository
             $childTable = CarBrand::find($inputs['car_brand_id']);
             $model->carBrand()->associate($childTable);
             $model->save();
-            
+
             $response = ApiResponse::json($model);
         } catch (Exception $e) {
             $exceptionDetails = $e->getMessage();
@@ -126,8 +126,8 @@ class CarModelRepository extends BaseRepository
 
         return $response;
     }
-    
-        /**
+
+    /**
      * Store a 
      * 
      * @param  array $inputs
@@ -147,8 +147,8 @@ class CarModelRepository extends BaseRepository
 
         return $model;
     }
-    
-         /**
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  Form data posted from ajax $inputs
@@ -223,7 +223,21 @@ class CarModelRepository extends BaseRepository
             return $response;
         }
     }
-    
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function listCarModelData($carBrandId)
+    {
+        $carBrandId = (int) $carBrandId;
+        $cacheKey = str_replace(['\\'], [''], __METHOD__) . ':' . md5(json_encode($carBrandId));
+        //Cache::tags not suppport with files and Database
+        $response = Cache::tags(MyModel::table())->remember($cacheKey, $this->ttlCache, function() use($carBrandId) {
+            return MyModel::whereCarBrandId($carBrandId)->orderBY('id')->lists('model_name', 'id');
+        });
 
+        return $response;
+    }
 }

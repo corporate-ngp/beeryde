@@ -112,6 +112,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
     Route::resource('car-models', 'CarModelController');
 
 //manage cars
+    Route::get('cars/userCars/{user_id}', ['as' => 'admin.cars.userCars', 'uses' => 'CarController@getUserCarsData']);
     Route::get('cars/carModelData/{cid}', ['as' => 'admin.cars.carModelList', 'uses' => 'CarController@getCarModelData']);
     Route::get('cars/data', ['as' => 'admin.cars.list', 'uses' => 'CarController@getData']);
     Route::resource('cars', 'CarController');

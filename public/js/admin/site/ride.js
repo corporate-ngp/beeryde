@@ -1,4 +1,4 @@
-siteObjJs.admin.cityJs = function () {
+siteObjJs.admin.rideJs = function () {
 
     // Initialize all the page-specific event listeners here.
 
@@ -17,21 +17,21 @@ siteObjJs.admin.cityJs = function () {
             $('.form-group').removeClass('has-success');
         });
 
-        $('#create-city').on('change', '.country_id', function (e) {
-            fetchStateList(this);
+        $('#create-city').on('change', '.country_id1', function (e) {
+            fetchCarList(this);
         });
 
-        $('#edit_form').on('change', '.country_id', function (e) {
-            fetchStateList(this);
+        $('#edit_form').on('change', '.country_id1', function (e) {
+            fetchCarList(this);
         });
 
-        $('#CityList').on('change', '#country-drop-down-search', function (e) {
-            fetchStateList(this, 'search');
+        $('#CarList').on('change', '#country-drop-down-search', function (e) {
+            fetchCarList(this, 'search');
         });
 
-        $('#CityList').on('click', '.filter-cancel', function (e) {
+        $('#CarList').on('click', '.filter-cancel', function (e) {
             $("#country-drop-down-search").val('');
-            $("#CityList #state-drop-down-search #state_id").val('');
+            $("#CarList #state-drop-down-search #state_id").val('');
             $("#status-drop-down-search").val('');
         });
 
@@ -39,12 +39,12 @@ siteObjJs.admin.cityJs = function () {
 
     // Method to fetch States list on country dropdown value changed
 
-    var fetchStateList = function (elet, content) {
+    var fetchCarList = function (elet, content) {
         content = content || '';
         var currentForm = $(elet).closest("form");
-        var countryID = $(elet).val();
+        var userID = $(elet).val();
 
-        var actionUrl = 'cities/stateData/' + countryID;
+        var actionUrl = 'cars/userCars/' + userID;
         $.ajax({
             url: actionUrl,
             cache: false,
@@ -55,7 +55,7 @@ siteObjJs.admin.cityJs = function () {
             {
                 if (content === 'search') {
                     htm = $($.parseHTML(data.list)).filter('div#state-listing-content');
-                    $('#CityList').find("#state-drop-down-search").html(htm.html());
+                    $('#CarList').find("#state-drop-down-search").html(htm.html());
                 } else {
                     $(currentForm).find("#state-drop-down").html(data.list);
                 }
@@ -84,8 +84,8 @@ siteObjJs.admin.cityJs = function () {
 
     var fetchDataForEdit = function () {
         $('.portlet-body').on('click', '.edit-form-link', function () {
-            var city_id = $(this).attr("id");
-            var actionUrl = 'cities/' + city_id + '/edit';
+            var car_id = $(this).attr("id");
+            var actionUrl = 'rides/' + car_id + '/edit';
             $.ajax({
                 url: actionUrl,
                 cache: false,
@@ -185,7 +185,7 @@ siteObjJs.admin.cityJs = function () {
 
         grid = new Datatable();
         grid.init({
-            src: $('#CityList'),
+            src: $('#CarList'),
             loadingMessage: 'Loading...',
             dataTable: {
                 'language': {
@@ -198,9 +198,11 @@ siteObjJs.admin.cityJs = function () {
                 "columns": [
                     {data: null, name: 'rownum', searchable: false},
                     {data: 'id', name: 'id', visible: false},
-                    {data: 'country.name', name: 'country.name'},
-                    {data: 'states.name', name: 'states.name'},
-                    {data: 'name', name: 'name'},
+                    {data: 'user_id', name: 'user_id'},
+                    {data: 'ride_from', name: 'ride_from'},
+                    {data: 'ride_to', name: 'ride_to'},
+                    {data: 'price', name: 'price'},
+                    {data: 'ride_date', name: 'ride_date'},
                     {data: 'status', name: 'status'},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
                 ],
@@ -217,7 +219,7 @@ siteObjJs.admin.cityJs = function () {
                     });
                 },
                 "ajax": {
-                    "url": "cities/data",
+                    "url": "rides/data",
                     "type": "GET"
                 },
                 "order": [

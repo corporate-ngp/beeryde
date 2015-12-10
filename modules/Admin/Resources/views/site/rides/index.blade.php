@@ -5,7 +5,7 @@
 <div id="ajax-response-text"></div>
 
 @if(!empty(Auth::user()->hasAdd))
-@include('admin::city.create')
+@include('admin::site.rides.create')
 @endif
 <div id="edit_form">
 
@@ -14,25 +14,25 @@
     <div class="portlet-title">
         <div class="caption">
             <i class="fa icon-social-dribbble font-blue-sharp"></i>
-            <span class="caption-subject font-blue-sharp bold uppercase">View Cities</span>
+            <span class="caption-subject font-blue-sharp bold uppercase">View Rides</span>
         </div>
         @if(!empty(Auth::user()->hasAdd))
         <div class="actions">
-            <a href="javascript:;" class="btn blue btn-add-big btn-expand-form"><i class="fa fa-plus"></i><span class="hidden-480">Add New City </span></a>
+            <a href="javascript:;" class="btn blue btn-add-big btn-expand-form"><i class="fa fa-plus"></i><span class="hidden-480">Add New Ride </span></a>
         </div>
         @endif
     </div>
     <div class="portlet-body">
         <div class="table-container">
-<!--            <div class="table-actions-wrapper">
+            <div class="table-actions-wrapper">
                 <span>
                 </span>
 
-                <table class="">
+<!--                <table class="">
                     <tbody>
                         {{--
                     <td>
-                        {!! Form::select('search_country', [''=>'All'] + $countryList, '',['class'=>'form-control width-auto', 'id' => 'search_country', 'column-index' => '2']) !!}
+                        {!! Form::select('car_brand_id', [''=>'All'] + $carBrandList, '',['class'=>'form-control width-auto', 'id' => 'car_brand_id', 'column-index' => '2']) !!}
                     </td>
                         --}}
                     <td>&nbsp;&nbsp;&nbsp;</td>
@@ -41,20 +41,22 @@
                         <input id="data-search" type="search" class="form-control" placeholder="Search">
                     </td>
                     </tbody>
-                </table>
-            </div>-->
-            <table class="table table-striped table-bordered table-hover" id="CityList">
+                </table>-->
+            </div>
+            <table class="table table-striped table-bordered table-hover" id="CarList">
                 <thead>
                     <tr role="row" class="heading">
                         <th>#</th>
-                        <th width='5%'>ID</th>
-                        <th width='20%'>Country</th>
-                        <th width='20%'>State</th>
-                        <th>City Name</th>
-                        <th width='20%'>Status</th>
-                        <th width='10%'>Options</th>
+                        <th width=''>ID</th>
+                        <th width='5%'>User Id</th>
+                        <th width=''>Ride From</th>
+                        <th width=''>Ride To</th>
+                        <th width='10%'>Price</th>
+                        <th width=''>Ride Date</th>
+                        <th width='2%'>Status</th>
+                        <th width='5%'>Options</th>
                     </tr>
-                    @include('admin::city.search')
+                    @include('admin::site.rides.search')
                 </thead>
                 <tbody>
 
@@ -67,14 +69,14 @@
 
 @section('template-level-scripts')
 @parent
-{!! HTML::script( URL::asset('js/admin/city.js') ) !!}
+{!! HTML::script( URL::asset('js/admin/site/ride.js') ) !!}
 @stop
 
 @section('scripts')
 @parent
 <script>
     jQuery(document).ready(function () {
-        siteObjJs.admin.cityJs.init();
+        siteObjJs.admin.rideJs.init();
         siteObjJs.admin.commonJs.boxExpandBtnClick();
     });
 </script>

@@ -9,7 +9,7 @@
     </div>
     <div class="portlet-body form display-hide">
         {!! Form::open(['route' => ['admin.cars.store'], 'method' => 'post', 'class' => 'form-horizontal city-form',  'id' => 'create-city', 'msg' => 'Car added successfully.']) !!}
-        @include('admin::city.form')
+        @include('admin::site.cars.form')
         <div class="form-actions">
             <div class="col-md-6">
                 <div class="col-md-offset-6 col-md-9">

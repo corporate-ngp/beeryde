@@ -44,7 +44,7 @@ siteObjJs.admin.carJs = function () {
         var currentForm = $(elet).closest("form");
         var countryID = $(elet).val();
 
-        var actionUrl = 'cities/stateData/' + countryID;
+        var actionUrl = 'cars/carModelData/' + countryID;
         $.ajax({
             url: actionUrl,
             cache: false,
@@ -85,7 +85,7 @@ siteObjJs.admin.carJs = function () {
     var fetchDataForEdit = function () {
         $('.portlet-body').on('click', '.edit-form-link', function () {
             var car_id = $(this).attr("id");
-            var actionUrl = 'cities/' + car_id + '/edit';
+            var actionUrl = 'cars/' + car_id + '/edit';
             $.ajax({
                 url: actionUrl,
                 cache: false,
@@ -198,9 +198,10 @@ siteObjJs.admin.carJs = function () {
                 "columns": [
                     {data: null, name: 'rownum', searchable: false},
                     {data: 'id', name: 'id', visible: false},
-                    {data: 'country.name', name: 'country.name'},
-                    {data: 'states.name', name: 'states.name'},
-                    {data: 'name', name: 'name'},
+                    {data: 'car_brand.brand_name', name: 'car_brand_id'},
+                    {data: 'car_model.model_name', name: 'car_model_id'},
+                    {data: 'user.id', name: 'user.id'},
+                    {data: 'registration_number', name: 'registration_number'},
                     {data: 'status', name: 'status'},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
                 ],
@@ -217,7 +218,7 @@ siteObjJs.admin.carJs = function () {
                     });
                 },
                 "ajax": {
-                    "url": "cities/data",
+                    "url": "cars/data",
                     "type": "GET"
                 },
                 "order": [

@@ -11,13 +11,11 @@ use Auth;
 use Datatables;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Modules\Admin\Models\Car;
+use Modules\Admin\Models\Ride;
 use Modules\Admin\Repositories\RideRepository;
 use Modules\Admin\Repositories\CarRepository;
-use Modules\Admin\Repositories\CarBrandRepository;
-use Modules\Admin\Repositories\CarModelRepository;
-use Modules\Admin\Http\Requests\CarCreateRequest;
-use Modules\Admin\Http\Requests\CarUpdateRequest;
+use Modules\Admin\Http\Requests\RideCreateRequest;
+use Modules\Admin\Http\Requests\RideUpdateRequest;
 
 class RideController extends Controller
 {
@@ -28,40 +26,22 @@ class RideController extends Controller
      * @var Modules\Admin\Repositories\RideRepository
      */
     protected $repository;
-
-    /**
-     * The CarBrandRepository instance.
-     *
-     * @var Modules\Admin\Repositories\CarBrandRepository
-     */
-    protected $carBrandRepository;
-
-    /**
-     * The CarModelRepository instance.
-     *
-     * @var Modules\Admin\Repositories\CarModelRepository
-     */
-    protected $carModelRepository;
-    
     protected $carRepository;
 
     /**
      * Create a new CarController instance.
      *
      * @param  Modules\Admin\Repositories\CarRepository $repository,
-     *  Modules\Admin\Repositories\CarBrandRepository $carBrandRepository,
-     *  Modules\Admin\Repositories\CarModelRepository $carModelRepository
+     *  Modules\Admin\Repositories\CarBrandRepository $carRepository,
      * 
      * @return void
      */
-    public function __construct(RideRepository $repository, CarRepository $carRepository, CarBrandRepository $carBrandRepository, CarModelRepository $carModelRepository)
+    public function __construct(RideRepository $repository, CarRepository $carRepository)
     {
         parent::__construct();
         $this->middleware('acl');
         $this->repository = $repository;
         $this->carRepository = $carRepository;
-        $this->carBrandRepository = $carBrandRepository;
-        $this->carModelReposotiry = $carModelRepository;
     }
 
     /**
@@ -71,10 +51,9 @@ class RideController extends Controller
      */
     public function index()
     {
-        $carBrandList = $this->carBrandRepository->listCarBrandData()->toArray();
-        $carModelList = [];
+        $carList = $this->carRepository->listUserCarData();
 
-        return view('admin::site.rides.index', compact('carBrandList', 'carModelList'));
+        return view('admin::site.rides.index', compact('carList'));
     }
 
     /**
@@ -84,23 +63,23 @@ class RideController extends Controller
      */
     public function getData(Request $request)
     {
-        $cities = $this->repository->data();
+        $model = $this->repository->data();
         //filter to display own records
         if (Auth::user()->hasOwnView && (empty(Auth::user()->hasEdit) || empty(Auth::user()->hasDelete))) {
-            $cities = $cities->filter(function ($row) {
+            $model = $model->filter(function ($row) {
                 return (Str::equals($row['created_by'], Auth::user()->id)) ? true : false;
             });
         }
 
-        return Datatables::of($cities)
-                ->addColumn('status', function ($city) {
-                    $status = ($city->status) ? '<span class="label label-sm label-success">Active</span>' : '<span class="label label-sm label-danger">Inactive</span>';
+        return Datatables::of($model)
+                ->addColumn('status', function ($model) {
+                    $status = ($model->status) ? '<span class="label label-sm label-success">Active</span>' : '<span class="label label-sm label-danger">Inactive</span>';
                     return $status;
                 })
-                ->addColumn('action', function ($city) {
+                ->addColumn('action', function ($model) {
                     $actionList = '';
-                    if (!empty(Auth::user()->hasEdit) || (!empty(Auth::user()->hasOwnEdit) && ($city->created_by == Auth::user()->id))) {
-                        $actionList = '<a href="javascript:;" data-action="edit" data-id="' . $city->id . '" id="' . $city->id . '" class="btn btn-xs default margin-bottom-5 yellow-gold edit-form-link" title="Edit"><i class="fa fa-pencil"></i></a>';
+                    if (!empty(Auth::user()->hasEdit) || (!empty(Auth::user()->hasOwnEdit) && ($model->created_by == Auth::user()->id))) {
+                        $actionList = '<a href="javascript:;" data-action="edit" data-id="' . $model->id . '" id="' . $model->id . '" class="btn btn-xs default margin-bottom-5 yellow-gold edit-form-link" title="Edit"><i class="fa fa-pencil"></i></a>';
                     }
                     return $actionList;
                 })
@@ -112,23 +91,31 @@ class RideController extends Controller
                             return (Str::equals($row['created_by'], Auth::user()->id)) ? true : false;
                         });
                     }
-                    if ($request->has('car_brand_id')) {
-                        $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                            return Str::equals($row['car_brand_id'], $request->get('car_brand_id')) ? true : false;
-                        });
-                    }
-                    if ($request->has('car_model_id')) {
+                    if ($request->has('user_id')) {
 
                         $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                            return Str::equals($row['car_model_id'], strtoupper($request->get('car_model_id'))) ? true : false;
+                            return Str::equals($row['user_id'], $request->get('user_id')) ? true : false;
                         });
                     }
-                    if ($request->has('name')) {
+                    if ($request->has('ride_from')) {
 
                         $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                            return Str::contains(strtolower($row['name']), strtolower($request->get('name'))) ? true : false;
+                            return Str::contains(strtolower($row['ride_from']), strtolower($request->get('ride_from'))) ? true : false;
                         });
                     }
+                    if ($request->has('ride_to')) {
+
+                        $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                            return Str::contains(strtolower($row['ride_to']), strtolower($request->get('ride_to'))) ? true : false;
+                        });
+                    }
+                    if ($request->has('price')) {
+
+                        $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                            return Str::contains(strtolower($row['price']), strtolower($request->get('price'))) ? true : false;
+                        });
+                    }
+
                     if ($request->has('status')) {
                         $instance->collection = $instance->collection->filter(function ($row) use ($request) {
                             return Str::equals($row['status'], $request->get('status')) ? true : false;
@@ -139,28 +126,15 @@ class RideController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return json encoded response
-     */
-    public function getCarModelData($carBrandId)
-    {
-        $carModelList = $this->carModelReposotiry->listCarModelData($carBrandId)->toArray();
-        $response['list'] = View('admin::site.rides.carModeldropdown', compact('carModelList'))->render();
-        return response()->json($response);
-    }
-
-    /**
      * Display a form to create new city.
      *
      * @return view as response
      */
     public function create()
     {
-        $carBrandList = $this->carBrandRepository->listCarBrandData()->toArray();
-        $carModelList = [];
+        $carList = $this->carRepository->listUserCarData();
 
-        return view('admin::site.rides.create', compact('carBrandList', 'carModelList'));
+        return view('admin::site.rides.create', compact('carList'));
     }
 
     /**
@@ -169,9 +143,9 @@ class RideController extends Controller
      * @param  Modules\Admin\Http\Requests\CarCreateRequest $request
      * @return json encoded Response
      */
-    public function store(CarCreateRequest $request)
+    public function store(RideCreateRequest $request)
     {
-        $response = $this->repository->create($request->all());
+        $response = $this->repository->store($request->all());
 
         return response()->json($response);
     }
@@ -179,16 +153,15 @@ class RideController extends Controller
     /**
      * Show the form for editing the specified Car.
      *
-     * @param  Modules\Admin\Models\Car $city
+     * @param  Modules\Admin\Models\Car $model
      * @return json encoded Response
      */
-    public function edit(Car $city)
+    public function edit(Ride $model)
     {
-        $carBrandList = $this->carBrandRepository->listCarBrandData()->toArray();
-        $carModelList = $this->carModelReposotiry->listCarModelData($city->car_brand_id)->toArray();
+        $carList = $this->carRepository->listUserCarData();
 
         $response['success'] = true;
-        $response['form'] = view('admin::site.rides.edit', compact('city', 'carBrandList', 'carModelList'))->render();
+        $response['form'] = view('admin::site.rides.edit', compact('model', 'carList'))->render();
 
         return response()->json($response);
     }
@@ -196,12 +169,12 @@ class RideController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Modules\Admin\Http\Requests\CarUpdateRequest $request, Modules\Admin\Models\Car $city
+     * @param  Modules\Admin\Http\Requests\CarUpdateRequest $request, Modules\Admin\Models\Car $model
      * @return json encoded Response
      */
-    public function update(CarUpdateRequest $request, Car $city)
+    public function update(RideUpdateRequest $request, Ride $model)
     {
-        $response = $this->repository->update($request->all(), $city);
+        $response = $this->repository->updateMe($request->all(), $model);
 
         return response()->json($response);
     }

@@ -1,15 +1,15 @@
 <div class="portlet box yellow-gold edit-form-main">
     <div class="portlet-title togglelable">
         <div class="caption">
-            <i class="fa fa-pencil"></i>Edit City 
+            <i class="fa fa-pencil"></i>Edit Ride 
         </div>
         <div class="tools">
             <a href="javascript:;" class="expand box-expand-form"></a>
         </div>
     </div>
     <div class="portlet-body form">
-        {!! Form::model($city, ['route' => ['admin.cities.update', $city->id], 'method' => 'put', 'class' => 'form-horizontal panel config-setting-form','id'=>'edit-city', 'msg' => 'City updated successfully.']) !!}
-        @include('admin::city.form')
+        {!! Form::model($model, ['route' => ['admin.rides.update', $model->id], 'method' => 'put', 'class' => 'form-horizontal panel config-setting-form','id'=>'edit-city', 'msg' => 'Ride updated successfully.']) !!}
+        @include('admin::site.rides.form')
         <div class="form-actions">
             <div class="col-md-6">
                 <div class="col-md-offset-6 col-md-9">

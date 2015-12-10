@@ -80,23 +80,24 @@ class CarController extends Controller
      */
     public function getData(Request $request)
     {
-        $cities = $this->repository->data();
+        $model = $this->repository->data();
+        //dd($model);
         //filter to display own records
         if (Auth::user()->hasOwnView && (empty(Auth::user()->hasEdit) || empty(Auth::user()->hasDelete))) {
-            $cities = $cities->filter(function ($row) {
+            $model = $model->filter(function ($row) {
                 return (Str::equals($row['created_by'], Auth::user()->id)) ? true : false;
             });
         }
 
-        return Datatables::of($cities)
-                ->addColumn('status', function ($city) {
-                    $status = ($city->status) ? '<span class="label label-sm label-success">Active</span>' : '<span class="label label-sm label-danger">Inactive</span>';
+        return Datatables::of($model)
+                ->addColumn('status', function ($row) {
+                    $status = ($row->status) ? '<span class="label label-sm label-success">Active</span>' : '<span class="label label-sm label-danger">Inactive</span>';
                     return $status;
                 })
-                ->addColumn('action', function ($city) {
+                ->addColumn('action', function ($row) {
                     $actionList = '';
-                    if (!empty(Auth::user()->hasEdit) || (!empty(Auth::user()->hasOwnEdit) && ($city->created_by == Auth::user()->id))) {
-                        $actionList = '<a href="javascript:;" data-action="edit" data-id="' . $city->id . '" id="' . $city->id . '" class="btn btn-xs default margin-bottom-5 yellow-gold edit-form-link" title="Edit"><i class="fa fa-pencil"></i></a>';
+                    if (!empty(Auth::user()->hasEdit) || (!empty(Auth::user()->hasOwnEdit) && ($row->created_by == Auth::user()->id))) {
+                        $actionList = '<a href="javascript:;" data-action="edit" data-id="' . $row->id . '" id="' . $row->id . '" class="btn btn-xs default margin-bottom-5 yellow-gold edit-form-link" title="Edit"><i class="fa fa-pencil"></i></a>';
                     }
                     return $actionList;
                 })
@@ -119,10 +120,16 @@ class CarController extends Controller
                             return Str::equals($row['car_model_id'], strtoupper($request->get('car_model_id'))) ? true : false;
                         });
                     }
-                    if ($request->has('name')) {
+                    if ($request->has('user_id')) {
 
                         $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                            return Str::contains(strtolower($row['name']), strtolower($request->get('name'))) ? true : false;
+                            return Str::contains(strtolower($row['user_id']), strtolower($request->get('user_id'))) ? true : false;
+                        });
+                    }
+                    if ($request->has('registration_number')) {
+
+                        $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                            return Str::contains(strtolower($row['registration_number']), strtolower($request->get('registration_number'))) ? true : false;
                         });
                     }
                     if ($request->has('status')) {
@@ -142,7 +149,19 @@ class CarController extends Controller
     public function getCarModelData($carBrandId)
     {
         $carModelList = $this->carModelReposotiry->listCarModelData($carBrandId)->toArray();
-        $response['list'] = View('admin::site.cars.carModeldropdown', compact('carModelList'))->render();
+        $response['list'] = View('admin::site.cars.carmodeldropdown', compact('carModelList'))->render();
+        return response()->json($response);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return json encoded response
+     */
+    public function getUserCarsData($userId)
+    {
+        $carModelList = $this->reposotiry->listUserCarData($userId)->toArray();
+        $response['list'] = View('admin::site.cars.usercardropdown', compact('carList'))->render();
         return response()->json($response);
     }
 
@@ -167,7 +186,7 @@ class CarController extends Controller
      */
     public function store(CarCreateRequest $request)
     {
-        $response = $this->repository->create($request->all());
+        $response = $this->repository->store($request->all());
 
         return response()->json($response);
     }
@@ -175,16 +194,16 @@ class CarController extends Controller
     /**
      * Show the form for editing the specified Car.
      *
-     * @param  Modules\Admin\Models\Car $city
+     * @param  Modules\Admin\Models\Car $row
      * @return json encoded Response
      */
-    public function edit(Car $city)
+    public function edit(Car $model)
     {
         $carBrandList = $this->carBrandRepository->listCarBrandData()->toArray();
-        $carModelList = $this->carModelReposotiry->listCarModelData($city->car_brand_id)->toArray();
+        $carModelList = $this->carModelReposotiry->listCarModelData($model->car_brand_id)->toArray();
 
         $response['success'] = true;
-        $response['form'] = view('admin::site.cars.edit', compact('city', 'carBrandList', 'carModelList'))->render();
+        $response['form'] = view('admin::site.cars.edit', compact('model', 'carBrandList', 'carModelList'))->render();
 
         return response()->json($response);
     }
@@ -197,7 +216,7 @@ class CarController extends Controller
      */
     public function update(CarUpdateRequest $request, Car $city)
     {
-        $response = $this->repository->update($request->all(), $city);
+        $response = $this->repository->updateMe($request->all(), $city);
 
         return response()->json($response);
     }

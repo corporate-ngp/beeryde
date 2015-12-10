@@ -25,25 +25,10 @@ class CarCreateRequest extends Request
     {
         $this->sanitize();
         return [
-            'country_id' => 'required|numeric',
-            'state_id' => 'required|numeric',
-            'name' => 'required|alphaSpaces|max:200',
+            'car_brand_id' => 'required|numeric',
+            'car_model_id' => 'required|numeric',
+            'user_id' => 'required|numeric',
             'status' => 'required|numeric'
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'country_id.required' => trans('admin::messages.error-required-select', ['name' => trans('admin::controller/city.country')]),
-            'country_id.numeric' => trans('admin::messages.error-numeric-id', ['name' => trans('admin::controller/city.country')]),
-            'state_id.required' => trans('admin::messages.error-required-select', ['name' => trans('admin::controller/city.state')]),
-            'state_id.numeric' => trans('admin::messages.error-numeric-id', ['name' => trans('admin::controller/city.state')]),
-            'name.required' => trans('admin::messages.error-required', ['name' => trans('admin::controller/city.name')]),
-            'name.alpha_spaces' => trans('admin::messages.error-alpha-spaces', ['name' => trans('admin::controller/city.name')]),
-            'name.max' => trans('admin::messages.error-maxlength-number', ['name' => trans('admin::controller/city.name'), 'number' => '200']),
-            'status.required' => trans('admin::messages.error-required-select', ['name' => trans('admin::controller/city.status')]),
-            'status.numeric' => trans('admin::messages.error-numeric-id', ['name' => trans('admin::controller/city.status')]),
         ];
     }
 
@@ -54,9 +39,9 @@ class CarCreateRequest extends Request
     {
         $input = $this->all();
 
-        $input['country_id'] = filter_var($input['country_id'], FILTER_SANITIZE_NUMBER_INT);
-        $input['state_id'] = filter_var($input['state_id'], FILTER_SANITIZE_NUMBER_INT);
-        $input['name'] = filter_var($input['name'], FILTER_SANITIZE_STRING);
+        $input['car_brand_id'] = filter_var($input['car_brand_id'], FILTER_SANITIZE_NUMBER_INT);
+        $input['car_model_id'] = filter_var($input['car_model_id'], FILTER_SANITIZE_NUMBER_INT);
+        $input['user_id'] = filter_var($input['user_id'], FILTER_SANITIZE_STRING);
         $input['status'] = filter_var($input['status'], FILTER_SANITIZE_NUMBER_INT);
         if (Auth::check()) {
             $input['created_by'] = filter_var(Auth::user()->id, FILTER_SANITIZE_NUMBER_INT);

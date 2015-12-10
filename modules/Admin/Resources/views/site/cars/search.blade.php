@@ -4,16 +4,18 @@
     <td>
     </td>
     <td>
-        {!!  Form::select('country_id', ['' => 'Select Country'] +$countryList, null, ['id' => 'country-drop-down-search', 'class'=>'form-control form-filter']) !!}
+        {!!  Form::select('car_model_id', ['' => 'Select Car Brand'] +$carBrandList, null, ['id' => 'country-drop-down-search', 'class'=>'form-control form-filter']) !!}
     </td>
     <td>
         <div id="state-drop-down-search">
-            {!!  Form::select('state_id', ['' => 'Select State'] +$stateList, null, ['class'=>'form-control form-filter']) !!}
+            {!!  Form::select('car_brand_id', ['' => 'Select Car Model'] +$carModelList, null, ['class'=>'form-control form-filter']) !!}
         </div>
-
     </td>
     <td>
-        {!! Form::text('name', null, ['class'=>'form-control form-filter']) !!}
+        {!! Form::text('user_id', null, ['class'=>'form-control form-filter']) !!}
+    </td>
+     <td>
+        {!! Form::text('registration_number', null, ['class'=>'form-control form-filter']) !!}
     </td>
     <td>
         {!!  Form::select('status', ['' => 'Select',0 => 'Inactive', 1 =>'Active'], null, ['id' => 'status-drop-down-search', 'class'=>'form-control form-filter'])!!}
