@@ -49,7 +49,8 @@ class UserController extends Controller
     public function index()
     {
         try {
-            $users = $this->repository->data();
+            $inputs = Input::all();
+            $users = $this->repository->data($inputs);
             if (!empty($users)) {
                 return ApiResponse::json($users);
             } else {
@@ -130,12 +131,12 @@ class UserController extends Controller
             $inputs = Input::all();
             $validator = Validator::make($inputs, $this->repository->getLoginRules($inputs));
             if ($validator->passes()) {
-                
+
                 $user = $this->repository->getLoginUser($inputs);
-                
-                if(!empty($user)){
-                    return $this->userTokenRepo->create(['user_id' =>$user->id, 'token' => Helper::generateUserToken($user->id)]);
-                }else{
+
+                if (!empty($user)) {
+                    return $this->userTokenRepo->create(['user_id' => $user->id, 'token' => Helper::generateUserToken($user->id)]);
+                } else {
                     return ApiResponse::error("Invalid login credentials or user does not exists.");
                 }
             } else {
@@ -155,7 +156,7 @@ class UserController extends Controller
             Log::info(str_replace(['\\'], [''], __METHOD__), ['error_message' => $e->getMessage()]);
         }
     }
-    
+
     public function sendOtp()
     {
         try {

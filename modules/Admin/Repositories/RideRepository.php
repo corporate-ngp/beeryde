@@ -10,14 +10,12 @@ namespace Modules\Admin\Repositories;
 
 use Modules\Admin\Models\Ride as MyModel;
 use Modules\Admin\Models\Car;
-use Modules\Admin\Models\CarModel;
 use Modules\Admin\Models\SiteUser as User;
 use App\Libraries\ApiResponse;
 use Exception;
 use Route;
 use Log;
 use Cache;
-use DB;
 
 class RideRepository extends BaseRepository
 {
@@ -74,7 +72,7 @@ class RideRepository extends BaseRepository
 
                 if (in_array($key, $allColumns)) {
                     if (in_array($key, ['ride_from', 'ride_to'])) {
-                        $query->where(DB::raw($key), 'LIKE', "%" . $value . "%");
+                        $query->where(\DB::raw($key), 'LIKE', "%" . $value . "%");
                     } else {
                         $query->where($key, '=', $value);
                     }

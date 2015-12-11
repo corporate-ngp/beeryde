@@ -157,8 +157,26 @@ class SiteUserRepository extends BaseRepository
     {
         //Cache::tags($this->model->table())->flush();
         $cacheKey = str_replace(['\\'], [''], __METHOD__) . ':' . md5(json_encode($params));
-        $response = Cache::tags($this->model->table())->remember($cacheKey, $this->ttlCache, function() {
-            return $this->model->select('*')->get();
+        $response = Cache::tags($this->model->table())->remember($cacheKey, $this->ttlCache, function() use ($params) {
+            //return $this->model->select('*')->get();
+            $query = $this->model->select('*');
+
+            $model = new $this->model;
+            $allColumns = $model->getTableColumns($model->getTable());
+            foreach ($params as $key => $value) {
+
+                if (in_array($key, $allColumns)) {
+                    if (in_array($key, ['name', 'email', 'contact'])) {
+                        $query->where(\DB::raw($key), 'LIKE', "%" . $value . "%");
+                    } else {
+                        $query->where($key, '=', $value);
+                    }
+                }
+            }
+
+            $query->orderBy('id');
+            //dd($query->getQuery()->toSql());
+            return $query->get();
         });
 
         return $response;
