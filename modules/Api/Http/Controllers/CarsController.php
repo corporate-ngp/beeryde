@@ -41,7 +41,11 @@ class CarsController extends Controller
     public function index()
     {
         try {
-            $myObj = $this->repository->data();
+            $inputs = Input::all();
+            if (!isset($inputs['status'])) {
+                $inputs['status'] = 1;
+            }
+            $myObj = $this->repository->data($inputs);
             if (!empty($myObj)) {
                 return ApiResponse::json($myObj);
             } else {
@@ -98,7 +102,6 @@ class CarsController extends Controller
             Log::info(str_replace(['\\'], [''], __METHOD__), ['error_message' => $e->getMessage()]);
         }
     }
-
 //    public function destroy($listId)
 //    {
 //        try {

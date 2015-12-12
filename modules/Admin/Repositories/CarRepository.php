@@ -63,8 +63,27 @@ class CarRepository extends BaseRepository
     {
         //Cache::tags($this->model->table(), CarBrand::table())->flush();
         $cacheKey = str_replace(['\\'], [''], __METHOD__) . ':' . md5(json_encode($params));
-        $response = Cache::tags($this->model->table(), CarModel::table(), CarBrand::table(), User::table())->remember($cacheKey, $this->ttlCache, function() {
-            return MyModel::with('User', 'CarModel', 'CarBrand')->orderBy('user_id', 'car_model_id', 'car_brand_id')->get();
+        $response = Cache::tags($this->model->table(), CarModel::table(), CarBrand::table(), User::table())->remember($cacheKey, $this->ttlCache, function() use ($params)  {
+            //return MyModel::with('User', 'CarModel', 'CarBrand')->orderBy('user_id', 'car_model_id', 'car_brand_id')->get();
+
+            $query = MyModel::with('User', 'CarModel', 'CarBrand');
+
+            $model = new $this->model;
+            $allColumns = $model->getTableColumns($model->getTable());
+            foreach ($params as $key => $value) {
+
+                if (in_array($key, $allColumns)) {
+                    if (in_array($key, ['registration_number'])) {
+                        $query->where(\DB::raw($key), 'LIKE', "%" . $value . "%");
+                    } else {
+                        $query->where($key, '=', $value);
+                    }
+                }
+            }
+
+            $query->orderBy('user_id', 'car_model_id', 'car_brand_id');
+            //dd($query->getQuery()->toSql());
+            return $query->get();
         });
 
         return $response;
