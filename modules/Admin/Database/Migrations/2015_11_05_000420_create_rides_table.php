@@ -33,7 +33,7 @@ class CreateRidesTable extends Migration
             $table->string('detour_time', 50)->nullable()->comment = "No detour,min 15 min,max 30min,max 1hr";
             $table->string('ride_preference', 50)->nullable()->comment = "male/female allow-female,male,both";
             $table->string('ride_purpose', 255)->nullable()->comment = "Description of purpose of ride";
-            $table->boolean('auto_approval_booking')->default(true)->unsigned()->comment = "1 : Yes, 0 : No";  
+            $table->boolean('auto_approval_booking')->default(true)->unsigned()->comment = "1 : Yes, 0 : No";
             $table->string('boarding_point1', 255)->nullable();
             $table->string('boarding_point1_lat_long', 100)->nullable()->comment = "Comma separated from latitude and longitude";
             $table->string('boarding_point1_fair', 10)->nullable();
@@ -47,16 +47,33 @@ class CreateRidesTable extends Migration
             $table->string('boarding_point4_lat_long', 100)->nullable()->comment = "Comma separated from latitude and longitude";
             $table->string('boarding_point4_fair', 10)->nullable();
             $table->string('boarding_point5', 255)->nullable();
-            $table->string('boarding_point5_lat_long', 100)->nullable()->comment = "Comma separated from latitude and longitude";  
+            $table->string('boarding_point5_lat_long', 100)->nullable()->comment = "Comma separated from latitude and longitude";
             $table->string('boarding_point5_fair', 10)->nullable();
+            $table->string('boarding_point6', 255)->nullable();
+            $table->string('boarding_point6_lat_long', 100)->nullable()->comment = "Comma separated from latitude and longitude";
+            $table->string('boarding_point6_fair', 10)->nullable();
+            $table->string('boarding_point7', 255)->nullable();
+            $table->string('boarding_point7_lat_long', 100)->nullable()->comment = "Comma separated from latitude and longitude";
+            $table->string('boarding_point7_fair', 10)->nullable();
+            $table->string('boarding_point8', 255)->nullable();
+            $table->string('boarding_point8_lat_long', 100)->nullable()->comment = "Comma separated from latitude and longitude";
+            $table->string('boarding_point8_fair', 10)->nullable();
+            $table->string('destinationfair', 10)->nullable();
+            $table->boolean('seat1')->default(0)->unsigned()->comment = "0 - unavailable, 1 - available, 2 - block";
+            $table->boolean('seat2')->default(1)->unsigned()->comment = "0 - unavailable, 1 - available, 2 - block";
+            $table->boolean('seat3')->default(1)->unsigned()->comment = "0 - unavailable, 1 - available, 2 - block";
+            $table->boolean('seat4')->default(1)->unsigned()->comment = "0 - unavailable, 1 - available, 2 - block";
+            $table->boolean('seat5')->default(1)->unsigned()->comment = "0 - unavailable, 1 - available, 2 - block";
+            $table->boolean('seat6')->default(1)->unsigned()->comment = "0 - unavailable, 1 - available, 2 - block";
+            $table->boolean('seat7')->default(1)->unsigned()->comment = "0 - unavailable, 1 - available, 2 - block";
+            $table->boolean('seat8')->default(1)->unsigned()->comment = "0 - unavailable, 1 - available, 2 - block";
             $table->boolean('pets_allow')->nullable()->unsigned()->comment = "1 : Yes, 0 : No";
             $table->boolean('smoking_allow')->nullable()->unsigned()->comment = "1 : Yes, 0 : No";
             $table->timestamps();
             $table->softDeletes();
-            
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('car_id')->references('id')->on('cars')->onDelete('cascade');
-            
         });
     }
 
