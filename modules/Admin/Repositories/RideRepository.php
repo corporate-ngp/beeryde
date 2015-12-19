@@ -73,6 +73,8 @@ class RideRepository extends BaseRepository
                 if (in_array($key, $allColumns)) {
                     if (in_array($key, ['ride_from', 'ride_to'])) {
                         $query->where(\DB::raw($key), 'LIKE', "%" . $value . "%");
+                    }else if (in_array($key, ['from_lat_long', 'to_lat_long', 'boarding_point1_lat_long', 'boarding_point2_lat_long', 'boarding_point3_lat_long', 'boarding_point4_lat_long', 'boarding_point5_lat_long', 'boarding_point6_lat_long', 'boarding_point7_lat_long', 'boarding_point8_lat_long'])) {
+                        //$query->where(\DB::raw($key), 'LIKE', "%" . $value . "%");
                     } else {
                         $query->where($key, '=', $value);
                     }
