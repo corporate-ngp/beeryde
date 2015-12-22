@@ -52,10 +52,10 @@ class CarBrandsController extends Controller
         }
     }
 
-    public function show($listId)
+    public function show($model)
     {
         try {
-            $id = (int) $listId;
+            $id = (int) $model->id;
             $myObj = $this->repository->getById($id);
             if (!empty($myObj)) {
                 return ApiResponse::json($myObj);

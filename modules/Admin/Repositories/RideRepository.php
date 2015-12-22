@@ -10,6 +10,8 @@ namespace Modules\Admin\Repositories;
 
 use Modules\Admin\Models\Ride as MyModel;
 use Modules\Admin\Models\Car;
+use Modules\Admin\Models\CarBrand;
+use Modules\Admin\Models\CarModel;
 use Modules\Admin\Models\SiteUser as User;
 use App\Libraries\ApiResponse;
 use Exception;
@@ -60,7 +62,7 @@ class RideRepository extends BaseRepository
      */
     public function data($params = [])
     {
-        //Cache::tags($this->model->table(), Car::table(), User::table())->flush();
+        Cache::tags($this->model->table(), Car::table(), User::table())->flush();
         $cacheKey = str_replace(['\\'], [''], __METHOD__) . ':' . md5(json_encode($params));
         $response = Cache::tags($this->model->table(), Car::table(), User::table())->remember($cacheKey, $this->ttlCache, function() use ($params) {
             //return MyModel::with('User', 'Car')->where('status', 1)->orderBy('user_id', 'car_id')->get();
@@ -73,7 +75,7 @@ class RideRepository extends BaseRepository
                 if (in_array($key, $allColumns)) {
                     if (in_array($key, ['ride_from', 'ride_to', 'ride_date', 'ride_return_date', 'multiple_times_travels_dates', 'ride_preference', 'ride_purpose', 'boarding_point1', 'boarding_point2', 'boarding_point3', 'boarding_point4', 'boarding_point5', 'boarding_point6', 'boarding_point7', 'boarding_point8'])) {
                         $query->where(\DB::raw($key), 'LIKE', "%" . $value . "%");
-                    }else if (in_array($key, ['from_lat_long', 'to_lat_long', 'boarding_point1_lat_long', 'boarding_point2_lat_long', 'boarding_point3_lat_long', 'boarding_point4_lat_long', 'boarding_point5_lat_long', 'boarding_point6_lat_long', 'boarding_point7_lat_long', 'boarding_point8_lat_long'])) {
+                    } else if (in_array($key, ['from_lat_long', 'to_lat_long', 'boarding_point1_lat_long', 'boarding_point2_lat_long', 'boarding_point3_lat_long', 'boarding_point4_lat_long', 'boarding_point5_lat_long', 'boarding_point6_lat_long', 'boarding_point7_lat_long', 'boarding_point8_lat_long'])) {
                         //$query->where(\DB::raw($key), 'LIKE', "%" . $value . "%");
                     } else {
                         $query->where($key, '=', $value);
@@ -81,9 +83,18 @@ class RideRepository extends BaseRepository
                 }
             }
 
-            $query->orderBy('user_id', 'car_id');
+            $query->orderBy('id', 'desc');
             //dd($query->getQuery()->toSql());
-            return $query->get();
+            $model = $query->get();
+            foreach ($model as $row) {
+
+                if (!empty($row->car->car_brand_id) && !empty($row->car->car_model_id)) {
+                    $row->car_brand = CarBrand::find($row->car->car_brand_id);
+                    $row->car_model = CarModel::find($row->car->car_model_id);
+                }
+            }
+
+            return $model;
         });
 
         return $response;
@@ -171,8 +182,13 @@ class RideRepository extends BaseRepository
             $carUser = User::find($model->user_id);
             $model->user()->associate($carUser);
 
-            $carModel = Car::find($model->car_model_id);
+            $carModel = Car::find($model->car_id);
             $model->car()->associate($carModel);
+
+            if (!empty($carModel->car_brand_id) && !empty($carModel->car_model_id)) {
+                $model->car_brand = CarBrand::find($carModel->car_brand_id);
+                $model->car_model = CarModel::find($carModel->car_model_id);
+            }
         } catch (Exception $e) {
             $exceptionDetails = $e->getMessage();
             Log::error('Exception ', ['Error Message' => $exceptionDetails, 'Current Action' => Route::getCurrentRoute()->getActionName()]);
