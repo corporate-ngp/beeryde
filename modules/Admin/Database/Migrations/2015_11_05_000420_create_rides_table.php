@@ -14,14 +14,14 @@ class CreateRidesTable extends Migration
     {
         Schema::create('rides', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->integer('user_id')->unsigned()->index();
+            $table->integer('user_id')->nullable()->unsigned()->index();
             $table->string('ride_from', 255)->index();
             $table->string('from_lat_long', 100)->nullable()->comment = "Comma separated from latitude and longitude";
             $table->string('ride_to', 255)->index();
             $table->string('to_lat_long', 100)->nullable()->comment = "Comma separated to latitude and longitude";
             $table->string('price', 10);
             $table->timestamp('ride_date');
-            $table->integer('car_id')->unsigned()->index();
+            $table->integer('car_id')->nullable()->unsigned()->index();
             $table->boolean('status')->default(true)->unsigned()->index()->comment = "1 : Active, 0 : Inactive";
             $table->boolean('return_ride')->default(false)->unsigned()->comment = "1 : Return, 0 : Non return";
             $table->timestamp('ride_return_date');
