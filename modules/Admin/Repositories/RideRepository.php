@@ -75,15 +75,18 @@ class RideRepository extends BaseRepository
                 if (in_array($key, $allColumns)) {
                     if (in_array($key, ['ride_from', 'ride_to', 'ride_date', 'ride_return_date', 'multiple_times_travels_dates', 'ride_preference', 'ride_purpose', 'boarding_point1', 'boarding_point2', 'boarding_point3', 'boarding_point4', 'boarding_point5', 'boarding_point6', 'boarding_point7', 'boarding_point8'])) {
                         if (in_array($key, ['ride_from', 'ride_to'])) {
-                            $query->where(\DB::raw($key), 'LIKE', "%" . $value . "%")
-                                ->orWhere(\DB::raw('boarding_point1'), 'LIKE', "%" . $value . "%")
-                                ->orWhere(\DB::raw('boarding_point2'), 'LIKE', "%" . $value . "%")
-                                ->orWhere(\DB::raw('boarding_point3'), 'LIKE', "%" . $value . "%")
-                                ->orWhere(\DB::raw('boarding_point4'), 'LIKE', "%" . $value . "%")
-                                ->orWhere(\DB::raw('boarding_point5'), 'LIKE', "%" . $value . "%")
-                                ->orWhere(\DB::raw('boarding_point6'), 'LIKE', "%" . $value . "%")
-                                ->orWhere(\DB::raw('boarding_point7'), 'LIKE', "%" . $value . "%")
-                                ->orWhere(\DB::raw('boarding_point8'), 'LIKE', "%" . $value . "%");
+
+                            $query->where(function ($query) use ($key, $value) {
+                                $query->where(\DB::raw($key), 'LIKE', "%" . $value . "%")
+                                    ->orWhere(\DB::raw('boarding_point1'), 'LIKE', "%" . $value . "%")
+                                    ->orWhere(\DB::raw('boarding_point2'), 'LIKE', "%" . $value . "%")
+                                    ->orWhere(\DB::raw('boarding_point3'), 'LIKE', "%" . $value . "%")
+                                    ->orWhere(\DB::raw('boarding_point4'), 'LIKE', "%" . $value . "%")
+                                    ->orWhere(\DB::raw('boarding_point5'), 'LIKE', "%" . $value . "%")
+                                    ->orWhere(\DB::raw('boarding_point6'), 'LIKE', "%" . $value . "%")
+                                    ->orWhere(\DB::raw('boarding_point7'), 'LIKE', "%" . $value . "%")
+                                    ->orWhere(\DB::raw('boarding_point8'), 'LIKE', "%" . $value . "%");
+                            });
                         } else {
                             $query->where(\DB::raw($key), 'LIKE', "%" . $value . "%");
                         }
