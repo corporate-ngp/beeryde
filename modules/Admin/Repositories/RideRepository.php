@@ -62,7 +62,7 @@ class RideRepository extends BaseRepository
      */
     public function data($params = [])
     {
-        Cache::tags($this->model->table(), Car::table(), User::table())->flush();
+        //Cache::tags($this->model->table(), Car::table(), User::table())->flush();
         $cacheKey = str_replace(['\\'], [''], __METHOD__) . ':' . md5(json_encode($params));
         $response = Cache::tags($this->model->table(), Car::table(), User::table())->remember($cacheKey, $this->ttlCache, function() use ($params) {
             //return MyModel::with('User', 'Car')->where('status', 1)->orderBy('user_id', 'car_id')->get();
