@@ -21,6 +21,8 @@ class CreateRidesTable extends Migration
             $table->string('to_lat_long', 100)->nullable()->comment = "Comma separated to latitude and longitude";
             $table->string('price', 10);
             $table->timestamp('ride_date');
+            $table->string('ride_distance', 15)->nullable()->comment = "Ride distance from ride from and ride to";
+            $table->string('ride_time', 15)->nullable()->comment = "Ride time from ride from and ride to";
             $table->integer('car_id')->nullable()->unsigned()->index();
             $table->boolean('status')->default(true)->unsigned()->index()->comment = "1 : Active, 0 : Inactive";
             $table->boolean('return_ride')->default(false)->unsigned()->comment = "1 : Return, 0 : Non return";
